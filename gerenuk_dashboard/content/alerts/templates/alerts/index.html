@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+{% load horizon i18n bootstrap %}
+
+{% block title %}{% trans "My Alerts"%}{% endblock %}
+
+{% block main %}
+  <hr>
+  {% if lang == "fr" %}
+    <div id="ranges">
+      {{ alerts_table.render }}
+    </div>
+    <div id="ranges">
+      {{ user_table.render }}
+    </div>
+  {% else %}
+    <div id="ranges">
+      {{ alerts_en_table.render }}
+    </div>
+    <div id="ranges">
+      {{ user_en_table.render }}
+    </div>
+    {% endif %}
+  </hr>
+{% endblock %}

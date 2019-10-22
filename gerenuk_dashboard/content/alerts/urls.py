@@ -16,22 +16,13 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 22 Oct 09:40:27 CEST 2019
+# Tue 22 Oct 10:31:34 CEST 2019
 
-from django.utils.translation import ugettext_lazy as _
+from django.conf.urls import url
+from gerenuk_dashboard.content.alerts import views
 
 
-# The slug of the dashboard the PANEL associated with
-PANEL_DASHBOARD = 'project'
-
-# The slug of the panel group the PANEL is associated with
-PANEL_GROUP = 'information'
-
-# The slug of the panel to be added to HORIZON_CONFIG
-PANEL = 'alerts'
-
-# Python panel class of the PANEL to be added
-ADD_PANEL = 'gerenuk_dashboard.content.alerts.panel.Alerts'
-
-# Automatically discover static resources in installed apps
-AUTO_DISCOVER_STATIC_FILES = True
+# Define URL patterns
+urlpatterns = [
+    url(r'^$', views.AlertsTables.as_view(), name ='index'),
+]
