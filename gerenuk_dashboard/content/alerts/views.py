@@ -44,11 +44,10 @@ class AlertsTables(MultiTableView):
     page_title = _("Alerts")
 
 
-    def verify(self, name):
+    def has_role(self, name):
         """
-        TODO
+        Check if the current user has a given role
         """
-        req = self.request      
         roles = user_acces.get_user(self.request).roles
 
         for r in roles:
@@ -58,17 +57,9 @@ class AlertsTables(MultiTableView):
         return False
 
 
-    def get_context_data(self, **kwargs):
-        """
-        Get the view context.
-        """
-        context = super(AlertsTables, self).get_context_data(**kwargs)
-        return context
-
-
     def get_project_alerts_data(self):
         """
-        Getter used by UserAlertsTable model.
+        Getter used by ProjectAlertsTable model.
         """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
@@ -95,7 +86,7 @@ class AlertsTables(MultiTableView):
         
     def get_user_alerts_data(self):
         """
-        Getter used by ProjectAlertsTable model.
+        Getter used by UserAlertsTable model.
         """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
@@ -106,7 +97,7 @@ class AlertsTables(MultiTableView):
         user_alerts = []
 
         for l in range(0, len(unread_alerts)):
-            if (unread_alerts[l]["uuid"] == user_acces.get_user(self.request).id) and not(self.verify(settings.PROJECT_MANAGER_ROLE)):
+            if (unread_alerts[l]["uuid"] == user_acces.get_user(self.request).id) and not(self.has_role(settings.PROJECT_MANAGER_ROLE)):
                 un_alerts = []
                 un_alerts.append(unread_alerts[l])
 
@@ -116,7 +107,7 @@ class AlertsTables(MultiTableView):
                     for a in alert_named:
                         user_alerts.append(a)
 
-            elif (self.verify(settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+            elif (self.has_role(settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
                 un_alerts = []
                 un_alerts.append(unread_alerts[l])
                 
