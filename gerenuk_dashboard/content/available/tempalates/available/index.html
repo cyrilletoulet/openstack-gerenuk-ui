@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+
+
+{% block title %}{% trans "My Resources"%}{% endblock %}
+
+{% block main %}
+
+<body>
+
+
+
+<h1> <span style="color:red">{% trans "Avaialble Resources " %}</span>
+
+
+<center>
+
+
+<div>
+
+
+<table width="300" id="alerts" class="table table-striped datatable  tablesorter tablesorter-default">
+
+
+    <thead>
+
+	<tr class="table_column_header tablesorter-headerRow"> 
+		<th class="sortable normal_column tablesorter-header tablesorter-headerAsc" data-column="0" tabindex="0">
+	
+		<div class="tablesorter-header-inner">
+		 <font size="4">{% trans "Available" %}</font>
+		
+		</div>
+		</th>
+  
+                <th class="normal_column tablesorter-header tablesorter-headerAsc" data-column="1" tabindex="0">
+        
+                <div class="tablesorter-header-inner">
+                <font size="4">{% trans "Flavor Name" %}</font>
+                
+                </div>
+                </th>
+	</thead>
+	<tbody>
+
+
+           	{% for k,v in flavor_data.items %}
+	<tr id="alerts__row__10" class="warning odd" data-object-id="10"> 
+ 	       
+           
+	   	<td class="sortable normal_column">
+          		<font size="4">{{ k }}</font>
+                
+            	</td>
+                
+
+                <td class="sortable normal_column">
+       	     		<font size="4">{{ v }} </font>
+                 </td>
+       
+               
+
+
+	</tr>
+	{% endfor %}
+        
+	</tbody>
+</table>
+</div>
+</div>
+</center>
+
+
+</body>
+{% endblock %}
+
+
