@@ -17,336 +17,223 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 21 Oct 15:21:40 CEST 2019
+# Tue 22 Oct 15:32:34 CEST 2019
 
-from __future__ import absolute_import
 import gerenuk
-import datetime
 import gerenuk.api
-from decimal import Decimal
-from collections import defaultdict
-import json
 
-from django.template import defaultfilters as filters
-from django.template.defaultfilters import yesno
+from openstack_auth import utils as user_acces
+
 from django.conf import settings
-from django.urls import reverse
-from django.utils.http import urlencode
+from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
-from horizon.utils import filters
 from horizon import tables
 
-from openstack_dashboard import api
-from openstack_dashboard.views import get_url_with_pagination
-from openstack_auth import utils as user_acces
-from openstack_auth.user import User as user_auth
-from django.core.handlers.wsgi import WSGIRequest
 
-ROLE = 'project_manager'
-
-
-class DeleteAlerts(tables.DeleteAction):
-   	name = "read" 
-    	help_text = _("Deleted alerts are not recoverable.")
-    	default_message_level = "info"
-
-
-
-
-
-    	@staticmethod
-    	def action_present(count):
-        	return ungettext_lazy(
-            	u"Make as read",
-            	u"Make as read",
-            	count
-		)
-   
-	@staticmethod
-	def action_past(count):
-		return ungettext_lazy(
-            	u"Scheduled deletion of Alert",
-      		u"Scheduled deletion of Alert",
-            	count
-        	)
-
-
-
-	def get_object_id(self, datum):
-		return datum.id
-    
-
-		
-	def allowed(self, request, user_alerts=None):
-		
-		
-		req = mydashboard.overview.views.ret(request)
-		roles = user_acces.get_user(req).roles
-		
-		for r in roles :
-
-				if r['name'] == ROLE :
-				
-					
-					
-				
-                               		return True
-	
-                return False
-
-
-                               	
-
-	def delete(self,request, obj_id):
-                config = gerenuk.Config()
-                config.load('/etc/gerenuk/gerenuk.conf')
-                project = "75a5d7351c6c4a40ad9fc3ab0a50f4d0"
-		
-                api = gerenuk.api.AlertsAPI(config)
-                unread_alerts = api.get_unread_alerts(project)
-	        read_ids = list()
-		for i in range(0, min(1,len(unread_alerts))):
-	 	  	
-		    print ("in the verify") 
-        	    read_ids.append(unread_alerts[i]["id"])
-		
-		api.tag_alerts_as_read([int(obj_id)])
-		print("\n")
-		
-		print ("Delete in PM Section Done")
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class DeleteAlertsUser(tables.DeleteAction):
-   	name = "read" 
-    	help_text = _("Deleted alerts are not recoverable.")
-    	default_message_level = "info"
-
-
-
-
-
-    	@staticmethod
-    	def action_present(count):
-        	return ungettext_lazy(
-            	u"Make as read",
-            	u"Make as read",
-            	count
-		)
-   
-	@staticmethod
-	def action_past(count):
-		return ungettext_lazy(
-            	u"Scheduled deletion of Alert",
-      		u"Scheduled deletion of Alert",
-            	count
-        	)
-
-
-
-	def get_object_id(self, datum):
-		return datum.id
-    
-	def delete(self,request, obj_id):
-                config = gerenuk.Config()
-                config.load('/etc/gerenuk/gerenuk.conf')
-                project = "75a5d7351c6c4a40ad9fc3ab0a50f4d0"
-		
-                api = gerenuk.api.AlertsAPI(config)
-                unread_alerts = api.get_unread_alerts(project)
-	        read_ids = list()
-		for i in range(0, min(1,len(unread_alerts))):
-	 	  	
-		    print ("in the verify") 
-        	    read_ids.append(unread_alerts[i]["id"])
-		
-		
-		api.tag_alerts_as_read([int(obj_id)])
-		print("\n")
-		
-		print ("Delete in User Section Done")
-	
-
-
-
-
-
-
+# Constants
 SEVERITY = {
-	 	0: "INFO", 
-		1: "ALERT", 
-		2: "WARNING",
-		3: "CRITICAL",
-	   }
+    0: "INFO", 
+    1: "ALERT", 
+    2: "WARNING",
+    3: "CRITICAL",
+}
 
 SEVERITY_CHOICES = (
-	 ("INFO","Info"),
-         ("ALERT","Alert"),
-         ("WARNING","Warning"),
-         ("CRITICAL","Critical"),
-	)
+    ("INFO", "Info"),
+    ("ALERT", "Alert"),
+    ("WARNING", "Warning"),
+    ("CRITICAL", "Critical"),
+)
+
+
+# Functions
 def get_severity(alert_named):
-	
-	return SEVERITY.get(getattr(alert_named, "severity",0), '')
+    """
+    Get the severity of an alert.
+    :param alert_named: (namedtuple) The alert named tuple
+    :return: (str) The severity string
+    """
+    return SEVERITY.get(getattr(alert_named, "severity", 0), '')
 
-	
+
+# Classes
+class MarkUserAlertsAsRead(tables.DeleteAction):
+    """
+    The horizon table used to delete user alerts.
+    """
+    name = "read" 
+    help_text = _("Deleted alerts are not recoverable.")
+    default_message_level = "info"
+
+
+    @staticmethod
+    def action_present(count):
+        """
+        Define action labels shown on page.
+        """
+        return ungettext_lazy(u"Mark alert as read", u"Mark them as read", count)
+
+
+    @staticmethod
+    def action_past(count):
+        """
+        Define message shown after action validation.
+        """
+        return ungettext_lazy(u"Scheduled deletion of alert", u"Scheduled deletion of alerts", count)
+
+
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+    
+        
+    def delete(self, request, obj_id):
+        """
+        Action called to define if the current user is allowed to mark alerts as read.
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+
+        project = user_acces.get_user(request).project_id
+        unread_alerts = gerenuk_api.get_unread_alerts(project)
+        read_ids = list()
+
+        for i in range(0, min(1, len(unread_alerts))):
+            read_ids.append(unread_alerts[i]["id"])
+
+        gerenuk_api.tag_alerts_as_read([int(obj_id)])
+
+
+
+class UserAlertsTable(tables.DataTable):
+    """
+    The horizon table used to display user alerts.
+    """
+    uuid = tables.Column("uuid", verbose_name=_("User's ID"))
+    if get_language() == "fr":
+        message = tables.Column('message_fr', verbose_name=_("Message"))
+    else:
+        message = tables.Column('message_en', verbose_name=_("Message"))
+    id = tables.Column('id', verbose_name=_("Id "))
+    severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
+    created = tables.Column("timestamp" , verbose_name=_("Created "))
+
+
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+
+
+    class Meta(object):
+        """
+        Define metadata.
+        """
+        name = "user_alerts"
+        verbose_name = _("User alerts")
+        status_columns = ["severity",]
+        table_actions = (MarkUserAlertsAsRead,)
+        row_actions = (MarkUserAlertsAsRead,)
+
         
 
-
-class AlertsTable(tables.DataTable):
-
-
-
-
-	project = tables.Column("project", verbose_name=_("Project"))
-	
-        
-#        zone = tables.Column('availability_zone',
- #                             verbose_name=_("Availability Zone"))
-        message_fr = tables.Column('message_fr', verbose_name=_("Message"))
-	
-        id = tables.Column('id', verbose_name=_("Id "))
-
-        severity = tables.Column(get_severity, verbose_name=_("Severity"),
-				sortable= True,
-				display_choices=SEVERITY_CHOICES)
-
-
-	created = tables.Column("timestamp" , verbose_name=_("Created "))
-
-
-
- 	def get_object_id(self, datum):
-		return datum.id
-	   
-
-        class Meta(object):
-            name = "alerts"
-            verbose_name = _("Alerts")
-	    status_columns = ["severity",]
-            table_actions = (DeleteAlerts,)
-	    row_actions = (DeleteAlerts,)
-
-
-class AlertsEnTable(tables.DataTable):
-
-
-
-
-        project = tables.Column("project", verbose_name=_("Project"))
-
-
-#        zone = tables.Column('availability_zone',
- #                             verbose_name=_("Availability Zone"))
-        message_en = tables.Column('message_en', verbose_name=_("Message"))
-
-        id = tables.Column('id', verbose_name=_("Id "))
-
-        severity = tables.Column(get_severity, verbose_name=_("Severity"),
-                                sortable= True,
-                                display_choices=SEVERITY_CHOICES)
-
-
-        created = tables.Column("timestamp" , verbose_name=_("Created "))
-
-
-
-        def get_object_id(self, datum):
-                return datum.id
-
-
-        class Meta(object):
-            name = "alerts_en"
-            verbose_name = _("Alerts")
-            status_columns = ["severity",]
-            table_actions = (DeleteAlerts,)
-            row_actions = (DeleteAlerts,)
-
-
-
+class MarkProjectAlertsAsRead(tables.DeleteAction):
+    """
+    The horizon table used to mark project alerts as read.
+    """
+    name = "read" 
+    help_text = _("Deleted alerts are not recoverable.")
+    default_message_level = "info"
 
     
-class UserTable(tables.DataTable):
+    @staticmethod
+    def action_present(count):
+        """
+        Define action labels shown on page.
+        """
+        return ungettext_lazy(u"Mark alert as read", u"Mark them as read", count)
 
 
+    @staticmethod
+    def action_past(count):
+        """
+        Define message shown after action validation.
+        """
+        return ungettext_lazy(u"Scheduled deletion of alert", u"Scheduled deletion of alerts", count)
 
 
-        uuid = tables.Column("uuid", verbose_name=_("User's ID"))
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+    
+        
+    def allowed(self, request, user_alerts=None):
+        """
+        Define if the current user is allowed to mark alerts as read.
+        """
+        roles = user_acces.get_user(request).roles
+        
+        for r in roles :
+            if r["name"] == settings.PROJECT_MANAGER_ROLE:
+                return True
 
-        message_fr = tables.Column('message_fr', verbose_name=_("Message"))
-
-        id = tables.Column('id', verbose_name=_("Id "))
-
-        severity = tables.Column(get_severity, verbose_name=_("Severity"),
-                                sortable= True,
-                                display_choices=SEVERITY_CHOICES)
-
-
-        created = tables.Column("timestamp" , verbose_name=_("Created "))
-
-
-
-        def get_object_id(self, datum):
-                return datum.id
-
-
-        class Meta(object):
-            name = "user"
-            verbose_name = _("User Alerts")
-            status_columns = ["severity",]
-            table_actions = (DeleteAlertsUser,)
-            row_actions = ( DeleteAlertsUser,)
-
-class UserEnTable(tables.DataTable):
+        return False
 
 
+    def delete(self, request, obj_id):
+        """
+        Action called to mark an alert as read.
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+
+        project = user_acces.get_user(request).project_id
+        unread_alerts = gerenuk_api.get_unread_alerts(project)
+        read_ids = list()
+        
+        for i in range(0, min(1, len(unread_alerts))):
+            read_ids.append(unread_alerts[i]["id"])
+
+        gerenuk_api.tag_alerts_as_read([int(obj_id)])
 
 
-        uuid = tables.Column("uuid", verbose_name=_("User's ID"))
+        
+class ProjectAlertsTable(tables.DataTable):
+    """
+    The horizon table used to display project alerts.
+    """
+    project = tables.Column("project", verbose_name=_("Project"))
+    if get_language() == "fr":
+        message = tables.Column('message_fr', verbose_name=_("Message"))
+    else:
+        message = tables.Column('message_en', verbose_name=_("Message"))
+    id = tables.Column('id', verbose_name=_("Id "))
+    severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
+    created = tables.Column("timestamp" , verbose_name=_("Created "))
 
-        message_en = tables.Column('message_en', verbose_name=_("Message"))
+    
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+       
 
-        id = tables.Column('id', verbose_name=_("Id "))
-
-        severity = tables.Column(get_severity, verbose_name=_("Severity"),
-                                sortable= True,
-                                display_choices=SEVERITY_CHOICES)
-
-
-        created = tables.Column("timestamp" , verbose_name=_("Created "))
-
-
-
-        def get_object_id(self, datum):
-                return datum.id
-
-
-        class Meta(object):
-            name = "user_en"
-            verbose_name = _("User Alerts")
-            status_columns = ["severity",]
-            table_actions = (DeleteAlertsUser,)
-            row_actions = ( DeleteAlertsUser,)
-
-
-
+    class Meta(object):
+        """
+        Define metadata.
+        """
+        name = "project_alerts"
+        verbose_name = _("Project alerts")
+        status_columns = ["severity",]
+        table_actions = (MarkProjectAlertsAsRead,)
+        row_actions = (MarkProjectAlertsAsRead,)

@@ -24,7 +24,7 @@ import horizon
 
 class Alerts(horizon.Panel):
     """
-    TODO
+    The alerts panel class
     """
     name = _("Alerts")
     slug = "alerts"

@@ -4,24 +4,17 @@
 {% load i18n sizeformat %}
 {% load horizon i18n bootstrap %}
 
-{% block title %}{% trans "My Alerts"%}{% endblock %}
+{% block title %}{% trans "Alerts"%}{% endblock %}
 
 {% block main %}
-  <hr>
-  {% if lang == "fr" %}
-    <div id="ranges">
-      {{ alerts_table.render }}
-    </div>
-    <div id="ranges">
-      {{ user_table.render }}
-    </div>
-  {% else %}
-    <div id="ranges">
-      {{ alerts_en_table.render }}
-    </div>
-    <div id="ranges">
-      {{ user_en_table.render }}
-    </div>
-    {% endif %}
-  </hr>
+  <h2>User alerts</h2>
+  <div>
+    {{ user_alerts_table.render }}
+  </div>
+
+  <h2>Projet alerts</h2>
+  <div>
+      {{ project_alerts_table.render }}
+  </div>
+  <hr/>
 {% endblock %}
