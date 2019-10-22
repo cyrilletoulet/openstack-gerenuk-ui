@@ -98,6 +98,6 @@ class AvailableResourcesView(TemplateView):
                                 possible += tmp
                             available = []
                             available.append(possible)
-                            for i in poss:
+                            for i in available:
                                 flavor_data[i] = f.name
            return flavor_data
