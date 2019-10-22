@@ -15,12 +15,12 @@
 #
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
-# Wed Oct 23 14:19:24 CEST 2019
+# Wed Oct 23 15:39:52 CEST 2019
 
 
 from django.conf.urls import url
 
-from gerenuk_dashboard.content.alerts import views
+from gerenuk_dashboard.content.available import views
 
 
 urlpatterns = [
