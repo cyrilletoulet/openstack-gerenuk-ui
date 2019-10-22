@@ -49,7 +49,7 @@ class AvailableResourcesView(TemplateView):
         Return the flavor_data context
         """
 
-        context = super(FlavorsView, self).get_context_data(**kwargs)
+        context = super(AvailableResourcesView, self).get_context_data(**kwargs)
         context['flavor_data'] = self.get_flavor(self)
         return context
 
