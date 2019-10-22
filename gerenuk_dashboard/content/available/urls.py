@@ -24,7 +24,7 @@ from gerenuk_dashboard.content.alerts import views
 
 
 urlpatterns = [
-     url(r'^$', views.AvailableResourcesView.as_view(), name='index'),
+      url(r'^$', views.AvailableResourcesView.as_view(), name='index'),
     
 ]
 
