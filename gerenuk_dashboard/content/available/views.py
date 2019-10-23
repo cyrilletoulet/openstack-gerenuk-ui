@@ -100,4 +100,4 @@ class AvailableResourcesView(TemplateView):
                             available.append(possible)
                             for i in available:
                                 flavor_data[i] = f.name
-           return flavor_data
+        return flavor_data
