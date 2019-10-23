@@ -98,7 +98,7 @@ class IndexView(tables.DataTableView):
    """
 
    table_class = project_tables.InstancesTable
-   template_name = 'mydashboard/monitoring/index.html'
+   template_name = 'project/monitoring/index.html'
    page_title = _("Monitoring")
 
     def has_role(self, name):
@@ -182,7 +182,7 @@ class ProjectViewHour(TemplateView):
     """
 
 
-    template_name = "mydashboard/monitoring/piecharthour.html"
+    template_name = "project/monitoring/piecharthour.html"
 
     def get_context_data(self, instance_id, **kwargs):
         """
@@ -254,11 +254,27 @@ class ProjectViewHour(TemplateView):
 ########### DAILY ##########
 
 class ProjectViewDay(TemplateView):
+    """
+    The daily statistics
+    """
 
-    template_name = "mydashboard/monitoring/piechartday.html"
+    template_name = "project/monitoring/piechartday.html"
+    
+    def get_context_data(self, instance_id, **kwargs):
+        """
+        Returns the daily statistics
+        """  
+        context = super(ProjectViewDay, self).get_context_data(**kwargs)
+        context['charts_daily'] = self._get_charts_data_daily(instance_id)
+
+        return context
+
 
     def get_data(self, instance_id, **kwargs):
-        
+        """
+        Returns statistics from Gerenuk
+        """
+     
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
@@ -270,35 +286,39 @@ class ProjectViewDay(TemplateView):
         return results
 
     def _get_charts_data_daily(self, instance_id):
+        """
+         Used to extract daily charts 
+        """  
+
         chart_sections_daily = []
         for section in CHART_DEFS_DAY:
+
             chart_data_daily = self._process_chart_section_daily(
                 section['charts_daily'], instance_id)
+
             chart_sections_daily.append({
                 'title': section['title'],
                 'charts_daily': chart_data_daily
             })
+
         return chart_sections_daily
 
     def _process_chart_section_daily(self, chart_defs_day, instance_id):
+
         charts_daily = []
         for t in chart_defs_day:
 
-            #            uuids = "435400fe-f40c-4af8-af99-f53f8db3357c"
+
             uuids = str(instance_id)
             key = t.quota_key
-        #    print key
             info = self.get_data(instance_id)
             used = float(info[uuids][key]['daily'])
 
             quota = (100 - used)
- #   print quota
             text = pgettext_lazy('Label in the limit summary', 'Used')
             filters = None
 
             used_display = "daily"
-            # When quota is float('inf'), we don't show quota
-            # so filtering is unnecessary.
             quota_display = None
 
             charts_daily.append({
@@ -313,21 +333,13 @@ class ProjectViewDay(TemplateView):
 
         return charts_daily
 
-    def get_context_data(self, instance_id, **kwargs):
-        context = super(ProjectViewDay, self).get_context_data(**kwargs)
 
-        context['charts_daily'] = self._get_charts_data_daily(instance_id)
-
-        #context = Context(context1, context2)
-        return context
-
-
-# WEEKLY ############"
+####### WEEKLY #########
 
 
 class ProjectViewWeek(TemplateView):
 
-    template_name = "mydashboard/monitoring/piechartweek.html"
+    template_name = "project/monitoring/piechartweek.html"
 
     def get_data(self, instance_id, **kwargs):
         config = gerenuk.Config()
