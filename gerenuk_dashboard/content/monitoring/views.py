@@ -18,7 +18,8 @@
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
 # Tue 22 Oct 15:52:30 CEST 2019
-# 
+# Thu Oct 24 14:02:07 CEST 2019
+ 
 
 from openstack_dashboard.dashboards.mydashboard.monitoring import tables
 from horizon import tables
@@ -339,20 +340,40 @@ class ProjectViewDay(TemplateView):
 
 class ProjectViewWeek(TemplateView):
 
+    """
+    The weekly statistics
+    """
+
+
     template_name = "project/monitoring/piechartweek.html"
 
+    def get_context_data(self, instance_id, **kwargs):
+        """
+        Returns the weekly statistics
+        """  
+
+        context = super(ProjectViewWeek, self).get_context_data(**kwargs)
+        context['charts_weekly'] = self._get_charts_data_weekly(instance_id)
+
+        return context
+
     def get_data(self, instance_id, **kwargs):
-        config = gerenuk.Config()
-        config.load('/etc/gerenuk/gerenuk.conf')
-        stats = []
-        api = gerenuk.api.InstancesMonitorAPI(config)
-        #uuids = ["435400fe-f40c-4af8-af99-f53f8db3357c"]
+        """
+        Returns statistics from Gerenuk
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+
         uuids = list()
         uuids.append(str(instance_id))
         results = api.get_instances_monitoring(uuids)
+
         return results
 
     def _get_charts_data_weekly(self, instance_id):
+
+
         chart_sections_weekly = []
         for section in CHART_DEFS_WEEK:
             chart_data_weekly = self._process_chart_section_weekly(
@@ -364,25 +385,22 @@ class ProjectViewWeek(TemplateView):
         return chart_sections_weekly
 
     def _process_chart_section_weekly(self, chart_defs_week, instance_id):
+
+        """
+        Process and append the statistics 
+        """
         charts_weekly = []
         for t in chart_defs_week:
 
-            #            uuids = "435400fe-f40c-4af8-af99-f53f8db3357c"
             uuids = str(instance_id)
+
             key = t.quota_key
-            #  print key
             info = self.get_data(instance_id)
-            used = float(info[uuids][key]['weekly'])
-            #print ("this is the used weekly")
-           # print used
+            used = float(info[uuids][key]['weekly'])            
             quota = (100 - used)
-            # print quota
             text = pgettext_lazy('Label in the limit summary', 'Used')
             filters = None
-
             used_display = "weekly"
-            # When quota is float('inf'), we don't show quota
-            # so filtering is unnecessary.
             quota_display = None
 
             charts_weekly.append({
@@ -397,8 +415,4 @@ class ProjectViewWeek(TemplateView):
 
         return charts_weekly
 
-    def get_context_data(self, instance_id, **kwargs):
-        context = super(ProjectViewWeek, self).get_context_data(**kwargs)
-        context['charts_weekly'] = self._get_charts_data_weekly(instance_id)
-        return context
 
