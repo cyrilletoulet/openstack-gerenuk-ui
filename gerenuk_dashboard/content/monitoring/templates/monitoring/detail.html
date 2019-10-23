@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+
+
+
+   <h1> {% trans "Usage Summary" %}</h1>
+<center>
+{% block main %}
+
+{% include 'mydashboard/monitoring/piecharthour.html' %}
+
+{% include 'mydashboard/monitoring/piechartday.html' %}
+
+{% include 'mydashboard/monitoring/piechartweek.html' %}
+
+
+{% endblock %}
+</center>
+
+

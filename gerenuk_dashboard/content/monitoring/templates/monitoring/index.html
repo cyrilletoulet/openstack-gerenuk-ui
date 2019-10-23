@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load i18n breadcrumb_nav %}
+
+{% block title %}{% trans "Monitoring" %}{% endblock %}
+
+{% block main %}
+
+<body>
+<h1> <span style="color:red"> {% trans "Instances" %}</span></h1>
+
+    {{ instances_table.render }}
+  </div>
+</body>
+{% endblock %}
+
