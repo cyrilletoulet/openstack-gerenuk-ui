@@ -151,7 +151,7 @@ class DetailView(TemplateView):
 
     template_name = "mydashboard/monitoring/detail.html"
     redirect_url = 'horizon:mydashboard:monitoring:index'
-    page_title = "{{ instance.name }}"
+    page_title = _"Monitoring" 
 
     def get_context_data(self, instance_id, **kwargs):
         """

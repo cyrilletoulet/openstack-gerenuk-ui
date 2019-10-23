@@ -5,12 +5,11 @@
 
 {% block main %}
 
-{% spaceless %}
  <div class="quota-dynamic limit-summary">
       {% for section in charts_daily %}
                 {% if section.title %}
 		
-              <h4> {% trans "Monitoring Daily" %} </h4>
+              <h2> {% trans "Monitoring Daily" %} </h2>
 		
             {% endif %}
        
@@ -22,19 +21,14 @@
 	
             <div class="d3_quota_bar col-lg-2 col-md-4 col-sm-4 col-xs-6"> 
               <div class="pie-chart-usage" data-used="{% quotapercenti chart.used chart.quota %}"></div>
-              <div class="quota_title" title="{{ chart.name }}" data-toggle="tooltip"> {{ chart.name }} {% trans " Used is " %} {{chart.used }} %  </div>
-              <div class="quota_subtitle">
-
-              </div>
+              <div class="quota_title" title="{{ chart.name }}" data-toggle="tooltip"> {{ chart.name }} {% trans " Used is " %} {{chart.used }} </div>
+              
             </div>
 	
       {% endfor %}
     {% endfor %}
  </div>
 
-
-
-      {% endspaceless %}
 
 {% endblock %}
 ~                              

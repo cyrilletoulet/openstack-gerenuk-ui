@@ -5,17 +5,14 @@
 {% load i18n sizeformat %}
 
 
-
-
-   <h1> {% trans "Usage Summary" %}</h1>
 <center>
 {% block main %}
 
-{% include 'mydashboard/monitoring/piecharthour.html' %}
+{% include 'project/monitoring/piecharthour.html' %}
 
-{% include 'mydashboard/monitoring/piechartday.html' %}
+{% include 'project/monitoring/piechartday.html' %}
 
-{% include 'mydashboard/monitoring/piechartweek.html' %}
+{% include 'project/monitoring/piechartweek.html' %}
 
 
 {% endblock %}
