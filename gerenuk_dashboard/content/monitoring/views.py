@@ -17,26 +17,23 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 22 Oct 15:52:30 CEST 2019
 # Thu Oct 24 14:02:07 CEST 2019
- 
-
-from openstack_dashboard.dashboards.mydashboard.monitoring import tables
-from horizon import tables
-
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import pgettext_lazy
-
-from horizon import exceptions
-
-from openstack_dashboard import api
-from openstack_auth import utils as user_acces
 
 
 import gerenuk
-
 import collections
+
+from horizon import tables
+from horizon import exceptions
+
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext_lazy
 from django.views.generic import TemplateView
+
+from openstack_dashboard.dashboards.mydashboard.monitoring import tables
+from openstack_dashboard import api
+from openstack_auth import utils as user_acces
 
 
 
@@ -126,7 +123,7 @@ class IndexView(tables.DataTableView):
         
         for instance in instances:
 
-            if self.verify(ROLE):
+            if self.has_role(settings.PROJECT_MANAGER_ROLE):
 
                 my_instances.append(instance)
 
