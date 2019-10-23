@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 22 Oct 15:32:34 CEST 2019
+# Wed 23 Oct 12:57:17 CEST 2019
 
 import gerenuk
 import gerenuk.api
@@ -64,7 +64,7 @@ class MarkUserAlertsAsRead(tables.DeleteAction):
     The horizon table used to delete user alerts.
     """
     name = "read" 
-    help_text = _("Deleted alerts are not recoverable.")
+    help_text = _("Please do the required actions before marking this alert.")
     default_message_level = "info"
 
 
@@ -148,7 +148,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
     The horizon table used to mark project alerts as read.
     """
     name = "read" 
-    help_text = _("Deleted alerts are not recoverable.")
+    help_text = _("Please do the required actions before marking this alert.")
     default_message_level = "info"
 
     
