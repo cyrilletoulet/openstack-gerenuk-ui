@@ -17,8 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri Oct 25 11:06:19 CEST 2019
-
+#Fri Oct 25 13:12:26 CEST 2019
 
 
 import gerenuk
@@ -87,7 +86,7 @@ CHART_DEFS_DAY = [
 
 
 
-class IndexView(tables.DataTableView):
+class IndexView(DataTableView):
     """
     The instances view  
     """
