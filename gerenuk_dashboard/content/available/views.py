@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri Oct 25 11:14:17 CEST 2019
+# Fri Oct 25 13:48:50 CEST 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -57,12 +57,12 @@ class AvailableResourcesView(TemplateView):
         """
         # Used if under Rocky release
         #nova = _nova.novaclient(self.request)
-        nova_client = nova.novaclient(request)
+        nova_client = nova.novaclient(self.request)
         hypervisors_list = dict()
         flavor_data = dict()
 
         for hypervisor in nova_client.hypervisors.list(): 
-            hypervisors_list[h.service["host"]] = hypervisor
+            hypervisors_list[hypervisor.service["host"]] = hypervisor
         aggregates = nova_client.aggregates.list()
 
         for flavor in nova_client.flavors.list():
@@ -91,6 +91,6 @@ class AvailableResourcesView(TemplateView):
                             available.append(possible)
 
                             for i in available:
-                                flavor_data[i] = f.name
+                                flavor_data[i] = flavor.name
                                 
         return flavor_data
