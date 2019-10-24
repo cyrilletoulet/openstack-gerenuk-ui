@@ -16,7 +16,8 @@
 #
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
-# Wed Oct 23 14:10:03 CEST 2019
+#
+# Thu 24 Oct 16:39:57 CEST 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -24,23 +25,20 @@ from django.utils.translation import ugettext_lazy as _
 from openstack_dashboard import api
 from openstack_dashboard import policy
 
-### used if version < Rocky ###
+# Used if under Rocky release
 #from openstack_dashboard.api import _nova
 from openstack_dashboard.api import nova
 
 from openstack_auth import user
 from openstack_auth import utils as user_acces
 
-
 from collections import namedtuple
-
 
 
 class AvailableResourcesView(TemplateView):
     """
     The available resources view.
     """
-
     template_name = "mydashboard/available/flavor.html"
 
 
@@ -48,7 +46,6 @@ class AvailableResourcesView(TemplateView):
         """
         Return the flavor_data context
         """
-
         context = super(AvailableResourcesView, self).get_context_data(**kwargs)
         context['flavor_data'] = self.get_flavor(self)
         return context
@@ -58,46 +55,42 @@ class AvailableResourcesView(TemplateView):
         """
         Return the available flavors
         """
-             
-        # _nova used if version < Rocky
-        #c = _nova.novaclient(self.request)
-        c = nova.novaclient(request)
+        # Used if under Rocky release
+        #nova = _nova.novaclient(self.request)
+        nova_client = nova.novaclient(request)
         hypervisors_list = dict()
-            
         flavor_data = dict()
-        for h in c.hypervisors.list(): 
 
-            hypervisors_list[h.service["host"]] = h
-            aggregates = c.aggregates.list()
+        for hypervisor in nova_client.hypervisors.list(): 
+            hypervisors_list[h.service["host"]] = hypervisor
+            aggregates = nova_client.aggregates.list()
 
-            for f in c.flavors.list():
-
-                flavor_meta = f.get_keys()
-
+            for flavor in nova_client.flavors.list():
+                flavor_meta = flavor.get_keys()
+                
                 if len(flavor_meta.keys()) == 1:
                     flavor_key = flavor_meta.keys()[0]
 
-                    for a in aggregates:
-                        if a.name == flavor_key:
-
+                    for aggregate in aggregates:
+                        if aggregate.name == flavor_key:
                             possible = 0
-                            for h in a.hosts:
-                                if f.vcpus > (hypervisors_list[h].vcpus - hypervisors_list[h].vcpus_used):
+                            for aggregate_host in aggregate.hosts:
+                                if flavor.vcpus > (hypervisors_list[aggregate_host].vcpus - hypervisors_list[aggregate_host].vcpus_used):
                                     continue
-                                if f.ram > hypervisors_list[h].free_ram_mb:
+                                if flavor.ram > hypervisors_list[aggregate_host].free_ram_mb:
                                     continue
-                                if f.disk > hypervisors_list[h].free_disk_gb:
+                                if flavor.disk > hypervisors_list[aggregate_host].free_disk_gb:
                                     continue
 
-                                tmp = (
-                                    hypervisors_list[h].vcpus - hypervisors_list[h].vcpus_used) / f.vcpus
-                                tmp = min(
-                                    tmp, hypervisors_list[h].free_ram_mb / f.ram)
-                                tmp = min(
-                                    tmp, hypervisors_list[h].free_disk_gb / f.disk)
+                                tmp = (hypervisors_list[aggregate_host].vcpus - hypervisors_list[aggregate_host].vcpus_used) / flavor.vcpus
+                                tmp = min(tmp, hypervisors_list[aggregate_host].free_ram_mb / flavor.ram)
+                                tmp = min(tmp, hypervisors_list[aggregate_host].free_disk_gb / flavor.disk)
                                 possible += tmp
+
                             available = []
                             available.append(possible)
+
                             for i in available:
                                 flavor_data[i] = f.name
-           return flavor_data
+
+        return flavor_data

@@ -16,6 +16,4 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed Oct 23 13:42:59 CEST 2019
-
-
+# Thu 24 Oct 16:37:37 CEST 2019
