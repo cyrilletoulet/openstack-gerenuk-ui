@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri 25 Oct 09:39:03 CEST 2019
+# Fri Oct 25 11:10:07 CEST 2019
 
 from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -67,7 +67,7 @@ class InstancesTable(tables.DataTable):
         return instid
 
 
-    name = tables.Column("name", verbose_name=_("Name"), link=get_instnace_detail_link)
+    name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
     instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
     image_name = tables.Column('image_name', verbose_name=_("Image"))
     status = tables.Column("status", verbose_name=_("Status"))
