@@ -17,13 +17,14 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu Oct 24 14:02:07 CEST 2019
+# Fri Oct 25 11:06:19 CEST 2019
+
 
 
 import gerenuk
 import collections
 
-from horizon import tables
+from horizon.tables import DataTableView
 from horizon import exceptions
 
 from django.conf import settings
@@ -31,7 +32,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.views.generic import TemplateView
 
-from openstack_dashboard.dashboards.mydashboard.monitoring import tables
+from gerenuk_dashboard.content.monitoring import tables
 from openstack_dashboard import api
 from openstack_auth import utils as user_acces
 
@@ -90,7 +91,7 @@ class IndexView(tables.DataTableView):
     """
     The instances view  
     """
-    table_class = project_tables.InstancesTable
+    table_class = tables.InstancesTable
     template_name = 'project/monitoring/index.html'
     page_title = _("Monitoring")
 
@@ -124,7 +125,7 @@ class IndexView(tables.DataTableView):
                     my_instances.append(instance)
 
                  else:
-                    msg = _('Unable to retrieve instance size information.')
+                    msg = _('Unable to retrieve instance information.')
                     exceptions.handle(self.request, msg)
        
         return my_instances
@@ -136,9 +137,9 @@ class DetailView(TemplateView):
     """
     The monitoring view
     """
-    template_name = "mydashboard/monitoring/detail.html"
-    redirect_url = 'horizon:mydashboard:monitoring:index'
-    page_title = _"Monitoring" 
+    template_name = "project/monitoring/detail.html"
+    redirect_url = 'horizon:project:monitoring:index'
+    page_title = _("Monitoring") 
 
     def get_context_data(self, instance_id, **kwargs):
         """
@@ -182,11 +183,11 @@ class ProjectViewHour(TemplateView):
         """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
-        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
 
         uuid = list()
         uuid.append(str(instance_id))
-        results = api.get_instances_monitoring(uuid)
+        results = gerenuk_api.get_instances_monitoring(uuid)
 
         return results
 
@@ -259,11 +260,11 @@ class ProjectViewDay(TemplateView):
         """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
-        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
 
         uuid = list()
         uuid.append(str(instance_id))
-        results = api.get_instances_monitoring(uuid)
+        results = gerenuk_api.get_instances_monitoring(uuid)
 
         return results
 
@@ -336,11 +337,11 @@ class ProjectViewWeek(TemplateView):
         """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
-        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
 
         uuids = list()
         uuids.append(str(instance_id))
-        results = api.get_instances_monitoring(uuids)
+        results = gerenuk_api.get_instances_monitoring(uuids)
 
         return results
 
