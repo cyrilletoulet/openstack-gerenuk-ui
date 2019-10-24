@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri 25 Oct 08:04:33 CEST 2019
+# Fri Oct 25 11:14:17 CEST 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -39,7 +39,7 @@ class AvailableResourcesView(TemplateView):
     """
     The available resources view.
     """
-    template_name = "mydashboard/available/flavor.html"
+    template_name = "project/available/index.html"
 
 
     def get_context_data(self, **kwargs):
@@ -63,9 +63,9 @@ class AvailableResourcesView(TemplateView):
 
         for hypervisor in nova_client.hypervisors.list(): 
             hypervisors_list[h.service["host"]] = hypervisor
-            aggregates = nova_client.aggregates.list()
+        aggregates = nova_client.aggregates.list()
 
-            for flavor in nova_client.flavors.list():
+        for flavor in nova_client.flavors.list():
                 flavor_meta = flavor.get_keys()
                 
                 if len(flavor_meta.keys()) == 1:
