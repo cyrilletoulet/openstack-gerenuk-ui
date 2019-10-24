@@ -17,8 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Fri Oct 25 13:12:26 CEST 2019
-
+#Fri Oct 25 14:34:16 CEST 2019
 
 import gerenuk
 import collections
@@ -123,10 +122,6 @@ class IndexView(DataTableView):
                  if (userid == user_acces.get_user(self.request).id):
                     my_instances.append(instance)
 
-                 else:
-                    msg = _('Unable to retrieve instance information.')
-                    exceptions.handle(self.request, msg)
-       
         return my_instances
 
 
