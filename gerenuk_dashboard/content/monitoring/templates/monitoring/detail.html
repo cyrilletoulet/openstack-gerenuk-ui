@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+
+<center>
+{% block main %}
+
+{% include 'project/monitoring/piecharthour.html' %}
+
+{% include 'project/monitoring/piechartday.html' %}
+
+{% include 'project/monitoring/piechartweek.html' %}
+
+
+{% endblock %}
+</center>
+
+

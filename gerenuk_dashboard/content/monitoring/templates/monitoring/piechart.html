@@ -1,0 +1,30 @@
+
+{% extends 'base.html' %}
+
+{% load i18n horizon %}
+
+{% block main %}
+
+{% spaceless %}
+ <div class="quota-dynamic limit-summary">
+    <h3 class="quota-heading">Limit Summary</h3>
+    {% for section in charts %}
+      <h4>{{ section.title }}</h4>
+      {% for chart in section.charts %}
+  {% if forloop.first or forloop.counter0|divisibleby:6 %} 
+          <div class="row">
+     {% endif %}
+            <div class="d3_quota_bar col-lg-2 col-md-4 col-sm-4 col-xs-6">
+              <div class="pie-chart-usage" data-used="{% quotapercenti chart.used chart.quota %}"></div>
+              <div class="quota_title" title="{{ chart.name }}" data-toggle="tooltip"> {{ chart.name }} {% trans " Used is " %} {{chart.used }} %  </div>
+              <div class="quota_subtitle">
+
+              </div>
+            </div>
+
+      {% endfor %}
+    {% endfor %}
+ </div>
+{% endspaceless %}
+
+{% endblock %}

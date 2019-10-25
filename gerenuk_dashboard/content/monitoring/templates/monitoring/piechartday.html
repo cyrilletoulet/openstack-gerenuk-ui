@@ -1,0 +1,34 @@
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+{% block main %}
+
+ <div class="quota-dynamic limit-summary">
+      {% for section in charts_daily %}
+                {% if section.title %}
+		
+              <h2> {% trans "Monitoring Daily" %} </h2>
+		
+            {% endif %}
+       
+
+      {% for chart in section.charts_daily %}
+  {% if forloop.first or forloop.counter0|divisibleby:6 %}
+          <div class="row">
+     {% endif %}
+	
+            <div class="d3_quota_bar col-lg-2 col-md-4 col-sm-4 col-xs-6"> 
+              <div class="pie-chart-usage" data-used="{% quotapercenti chart.used chart.quota %}"></div>
+              <div class="quota_title" title="{{ chart.name }}" data-toggle="tooltip"> {{ chart.name }} {% trans " Used is " %} {{chart.used }} </div>
+              
+            </div>
+	
+      {% endfor %}
+    {% endfor %}
+ </div>
+
+
+{% endblock %}
+~                              

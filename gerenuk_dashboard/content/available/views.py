@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu 24 Oct 16:39:57 CEST 2019
+# Fri 25 Oct 08:04:33 CEST 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -92,5 +92,5 @@ class AvailableResourcesView(TemplateView):
 
                             for i in available:
                                 flavor_data[i] = f.name
-
+                                
         return flavor_data
