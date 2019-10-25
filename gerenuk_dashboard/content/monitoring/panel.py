@@ -16,8 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Thu Oct 24 14:48:27 CEST 2019
-
+# Thu Oct 24 14:48:27 CEST 2019
 
 from django.utils.translation import ugettext_lazy as _
 import horizon
@@ -30,4 +29,3 @@ class Monitoring(horizon.Panel):
     name = _("Monitoring")
     slug = "monitoring"
     permissions = ('openstack.services.compute',)
-

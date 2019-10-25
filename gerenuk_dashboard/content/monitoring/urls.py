@@ -19,8 +19,6 @@
 #
 # Thu Oct 24 14:21:45 CEST 2019
 
-
-
 from django.conf.urls import url
 from gerenuk_dashboard.content.alerts import views
 
@@ -29,6 +27,4 @@ from gerenuk_dashboard.content.alerts import views
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^(?P<instance_id>[^/]+)/$',views.DetailView.as_view(), name='detail'),
-
 ]
-

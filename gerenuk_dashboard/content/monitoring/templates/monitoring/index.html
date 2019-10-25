@@ -4,13 +4,6 @@
 {% block title %}{% trans "Monitoring" %}{% endblock %}
 
 {% block main %}
-
-<body>
-<h1> <span style="color:red"> {% trans "Instances" %}</span></h1>
-
-    {{ instances_table.render }}
-
-  </div>
-</body>
+  <h2>{% trans "Instances" %}</h2>
+  {{ instances_table.render }}
 {% endblock %}
-

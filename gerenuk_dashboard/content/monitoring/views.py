@@ -35,13 +35,11 @@ from openstack_dashboard.dashboards.mydashboard.monitoring import tables
 from openstack_dashboard import api
 from openstack_auth import utils as user_acces
 
-
-
-
-
+# Charts definition
 ChartDefHour = collections.namedtuple(
     'ChartDefHour',
-    ('quota_key', 'label', 'used_phrase', 'filters'))
+    ('quota_key', 'label', 'used_phrase', 'filters')
+)
 
 CHART_DEFS_HOUR = [
     {
@@ -50,14 +48,14 @@ CHART_DEFS_HOUR = [
             ChartDefHour("mem", _("Memory"), None, None),
             ChartDefHour("vcpu", _("Vcpu"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
-
         ]
-    }]
-
+    }
+]
 
 ChartDefWeek = collections.namedtuple(
     'ChartDefHour',
-    ('quota_key', 'label', 'used_phrase', 'filters'))
+    ('quota_key', 'label', 'used_phrase', 'filters')
+)
 
 CHART_DEFS_WEEK = [
     {
@@ -66,14 +64,14 @@ CHART_DEFS_WEEK = [
             ChartDefHour("mem", _("Memory"), None, None),
             ChartDefHour("vcpu", _("Vcpu"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
-
         ]
-    }]
-
+    }
+]
 
 ChartDefDay = collections.namedtuple(
     'ChartDefDay',
-    ('quota_key', 'label', 'used_phrase', 'filters'))
+    ('quota_key', 'label', 'used_phrase', 'filters')
+)
 
 CHART_DEFS_DAY = [
     {
@@ -82,22 +80,19 @@ CHART_DEFS_DAY = [
             ChartDefDay("mem", _("Memory"), None, None),
             ChartDefDay("vcpu", _("Vcpu"), None, None),
             ChartDefDay("cpu", _("CPU"), None, None),
-
         ]
-    }]
-
-
+    }
+]
 
 
 
 class IndexView(tables.DataTableView):
-   """
-   The instances view  
-   """
-
-   table_class = project_tables.InstancesTable
-   template_name = 'project/monitoring/index.html'
-   page_title = _("Monitoring")
+    """
+    The instances view  
+    """
+    table_class = project_tables.InstancesTable
+    template_name = 'project/monitoring/index.html'
+    page_title = _("Monitoring")
 
     def has_role(self, name):
         """
@@ -116,15 +111,11 @@ class IndexView(tables.DataTableView):
         """
         Getter used by the InstancesTable model
         """
-
         my_instances = []
-
         instances, self._more = api.nova.server_list(self.request)
         
         for instance in instances:
-
             if self.has_role(settings.PROJECT_MANAGER_ROLE):
-
                 my_instances.append(instance)
 
             elif hasattr(instance, 'user_id'):
@@ -139,16 +130,12 @@ class IndexView(tables.DataTableView):
         return my_instances
 
 
-############################################
-####            MONITORING              ####
-############################################
 
 class DetailView(TemplateView):
 
     """
     The monitoring view
     """
-
     template_name = "mydashboard/monitoring/detail.html"
     redirect_url = 'horizon:mydashboard:monitoring:index'
     page_title = _"Monitoring" 
@@ -172,14 +159,11 @@ class DetailView(TemplateView):
         return context
 
 
-########### HOURLY ##########
 
 class ProjectViewHour(TemplateView):
     """
     The hourly statistics
     """
-
-
     template_name = "project/monitoring/piecharthour.html"
 
     def get_context_data(self, instance_id, **kwargs):
@@ -193,11 +177,12 @@ class ProjectViewHour(TemplateView):
 
 
     def get_data(self, instance_id, **kwargs):
-
+        """
+        Fetch data from gerenuk API
+        """
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
-
 
         uuid = list()
         uuid.append(str(instance_id))
@@ -205,14 +190,13 @@ class ProjectViewHour(TemplateView):
 
         return results
 
+     
     def _get_charts_data_hourly(self, instance_id):
         """
-         User to extract hourly charts 
+        Used to extract hourly charts 
         """  
-
         chart_sections_hourly = []
         for section in CHART_DEFS_HOUR:
-
             chart_data_hourly = self._process_chart_section_hourly(section['charts_hourly'], instance_id)
             chart_sections_hourly.append({
                 'title': section['title'],
@@ -221,12 +205,14 @@ class ProjectViewHour(TemplateView):
 
         return chart_sections_hourly
 
+     
     def _process_chart_section_hourly(self, chart_defs_hour, instance_id):
+        """
+        Process the hourly chart section
+        """
         charts_hourly = []
         for t in chart_defs_hour:
-
             uuids_here = instance_id
-
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids_here][key]['hourly'])
@@ -249,14 +235,13 @@ class ProjectViewHour(TemplateView):
         return charts_hourly
 
 
-########### DAILY ##########
 
 class ProjectViewDay(TemplateView):
     """
     The daily statistics
     """
-
     template_name = "project/monitoring/piechartday.html"
+
     
     def get_context_data(self, instance_id, **kwargs):
         """
@@ -272,7 +257,6 @@ class ProjectViewDay(TemplateView):
         """
         Returns statistics from Gerenuk
         """
-     
         gerenuk_config = gerenuk.Config()
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
@@ -283,17 +267,14 @@ class ProjectViewDay(TemplateView):
 
         return results
 
+     
     def _get_charts_data_daily(self, instance_id):
         """
-         Used to extract daily charts 
+        Used to extract daily charts 
         """  
-
         chart_sections_daily = []
         for section in CHART_DEFS_DAY:
-
-            chart_data_daily = self._process_chart_section_daily(
-                section['charts_daily'], instance_id)
-
+            chart_data_daily = self._process_chart_section_daily(section['charts_daily'], instance_id)
             chart_sections_daily.append({
                 'title': section['title'],
                 'charts_daily': chart_data_daily
@@ -301,21 +282,20 @@ class ProjectViewDay(TemplateView):
 
         return chart_sections_daily
 
+     
     def _process_chart_section_daily(self, chart_defs_day, instance_id):
-
+        """
+        Process the daily chart section
+        """
         charts_daily = []
         for t in chart_defs_day:
-
-
             uuids = str(instance_id)
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids][key]['daily'])
-
             quota = (100 - used)
             text = pgettext_lazy('Label in the limit summary', 'Used')
             filters = None
-
             used_display = "daily"
             quota_display = None
 
@@ -332,28 +312,24 @@ class ProjectViewDay(TemplateView):
         return charts_daily
 
 
-####### WEEKLY #########
-
 
 class ProjectViewWeek(TemplateView):
-
     """
     The weekly statistics
     """
-
-
     template_name = "project/monitoring/piechartweek.html"
 
+    
     def get_context_data(self, instance_id, **kwargs):
         """
         Returns the weekly statistics
         """  
-
         context = super(ProjectViewWeek, self).get_context_data(**kwargs)
         context['charts_weekly'] = self._get_charts_data_weekly(instance_id)
 
         return context
 
+     
     def get_data(self, instance_id, **kwargs):
         """
         Returns statistics from Gerenuk
@@ -368,19 +344,22 @@ class ProjectViewWeek(TemplateView):
 
         return results
 
+     
     def _get_charts_data_weekly(self, instance_id):
-
-
+        """
+        Get the charts data
+        """
         chart_sections_weekly = []
         for section in CHART_DEFS_WEEK:
-            chart_data_weekly = self._process_chart_section_weekly(
-                section['charts_weekly'], instance_id)
+            chart_data_weekly = self._process_chart_section_weekly(section['charts_weekly'], instance_id)
             chart_sections_weekly.append({
                 'title': section['title'],
                 'charts_weekly': chart_data_weekly
             })
+            
         return chart_sections_weekly
 
+     
     def _process_chart_section_weekly(self, chart_defs_week, instance_id):
 
         """
@@ -388,9 +367,7 @@ class ProjectViewWeek(TemplateView):
         """
         charts_weekly = []
         for t in chart_defs_week:
-
             uuids = str(instance_id)
-
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids][key]['weekly'])            
@@ -411,5 +388,3 @@ class ProjectViewWeek(TemplateView):
             })
 
         return charts_weekly
-
-
