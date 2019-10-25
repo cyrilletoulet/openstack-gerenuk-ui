@@ -16,9 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Thu Oct 24 15:33:25 CEST 2019
-
-
+# Thu Oct 24 15:33:25 CEST 2019
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,4 +35,3 @@ ADD_PANEL = 'gerenuk_dashboard.content.monitoring.panel.Monitoring'
 
 # Automatically discover static resources in installed apps
 AUTO_DISCOVER_STATIC_FILES = True
-
