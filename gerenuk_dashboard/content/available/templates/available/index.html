@@ -7,41 +7,28 @@
 {% block title %}{% trans "Avaialble resources"%}{% endblock %}
 
 {% block main %}
-  <div>
-    <table width="300" id="alerts" class="table table-striped datatable  tablesorter tablesorter-default">
+  <div class="table_wrapper">
+    <table width="300" id="alerts" class="table table-striped datatable tablesorter tablesorter-default">
       <thead>
 	<tr class="table_column_header tablesorter-headerRow"> 
-	  <th class="sortable normal_column tablesorter-header tablesorter-headerAsc" data-column="0" tabindex="0">
-	
-	    <div class="tablesorter-header-inner">
-	      <font size="4">{% trans "Available" %}</font>	
-	    </div>
+	  <th class="sortable normal_column tablesorter-header" data-column="0" tabindex="0">
+	    <div class="tablesorter-header-inner">{% trans "Available" %}</div>
 	  </th>
   
-          <th class="normal_column tablesorter-header tablesorter-headerAsc" data-column="1" tabindex="0">
-            <div class="tablesorter-header-inner">
-              <font size="4">{% trans "Flavor Name" %}</font>
-            </div>
+          <th class="sortable normal_column tablesorter-header" data-column="1" tabindex="0">
+            <div class="tablesorter-header-inner">{% trans "Flavor name" %}</div>
           </th>
 	</tr>
       </thead>
       
       <tbody>
         {% for k,v in flavor_data.items %}
-	<tr id="alerts__row__10" class="warning odd" data-object-id="10"> 
- 	  <td class="sortable normal_column">
-            <font size="4">{{ k }}</font>
-          </td>
-                
-          <td class="sortable normal_column">
-       	    <font size="4">{{ v }} </font>
-          </td>
+	<tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"> 
+ 	  <td class="sortable normal_column">{{ k }}</td>
+          <td class="sortable normal_column">{{ v }}</td>
 	</tr>
 	{% endfor %}
-        
       </tbody>
     </table>
   </div>
 {% endblock %}
-
-
