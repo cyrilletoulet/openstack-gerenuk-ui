@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+
+{% block title %}{% trans "My Resources"%}{% endblock %}
+{% block main %}
+
+ <div>
+ <span style="color:red"> {% trans "Instances" %}</span>
+
+     {{ instances_table.render }}
+
+       </div>
+
+       <div>
+       <span style="color:red">{% trans "Volumes" %}</span>
+
+          {{ volumes_table.render }}
+     </div>
+
+       <div>
+       <span style="color:red">{% trans "Snapshots" %} </span>
+
+          {{ snapshots_table.render }}
+     </div>
+
+
+       <div>
+      <span style="color:red">{% trans "Project Images" %} </span>
+
+        {{ imgs_table.render }}
+</div>
+
+ {% endblock %}
+
