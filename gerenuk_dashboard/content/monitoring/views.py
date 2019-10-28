@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Fri Oct 25 14:34:16 CEST 2019
+# Mon 28 Oct 13:21:38 CET 2019
 
 import gerenuk
 import collections
@@ -36,14 +36,14 @@ from openstack_auth import utils as user_acces
 
 # Charts definition
 ChartDefHour = collections.namedtuple(
-    'ChartDefHour',
-    ('quota_key', 'label', 'used_phrase', 'filters')
+    "ChartDefHour",
+    ("quota_key", "label", "used_phrase", "filters")
 )
 
 CHART_DEFS_HOUR = [
     {
-        'title': _("Monitoring Hourly"),
-        'charts_hourly': [
+        "title": _("Monitoring Hourly"),
+        "charts_hourly": [
             ChartDefHour("mem", _("Memory"), None, None),
             ChartDefHour("vcpu", _("Vcpu"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
@@ -52,14 +52,14 @@ CHART_DEFS_HOUR = [
 ]
 
 ChartDefWeek = collections.namedtuple(
-    'ChartDefHour',
-    ('quota_key', 'label', 'used_phrase', 'filters')
+    "ChartDefHour",
+    ("quota_key", "label", "used_phrase", "filters")
 )
 
 CHART_DEFS_WEEK = [
     {
-        'title': _("Monitoring Weekly"),
-        'charts_weekly': [
+        "title": _("Monitoring Weekly"),
+        "charts_weekly": [
             ChartDefHour("mem", _("Memory"), None, None),
             ChartDefHour("vcpu", _("Vcpu"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
@@ -68,14 +68,14 @@ CHART_DEFS_WEEK = [
 ]
 
 ChartDefDay = collections.namedtuple(
-    'ChartDefDay',
-    ('quota_key', 'label', 'used_phrase', 'filters')
+    "ChartDefDay",
+    ("quota_key", "label", "used_phrase", "filters")
 )
 
 CHART_DEFS_DAY = [
     {
-        'title': _("Monitoring Daily"),
-        'charts_daily': [
+        "title": _("Monitoring Daily"),
+        "charts_daily": [
             ChartDefDay("mem", _("Memory"), None, None),
             ChartDefDay("vcpu", _("Vcpu"), None, None),
             ChartDefDay("cpu", _("CPU"), None, None),
@@ -90,7 +90,7 @@ class IndexView(DataTableView):
     The instances view  
     """
     table_class = tables.InstancesTable
-    template_name = 'project/monitoring/index.html'
+    template_name = "project/monitoring/index.html"
     page_title = _("Monitoring")
 
     def has_role(self, name):
@@ -100,7 +100,7 @@ class IndexView(DataTableView):
         roles = user_acces.get_user(self.request).roles
 
         for r in roles:
-            if r['name'] == name :
+            if r["name"] == name :
                 return True
 
         return False
@@ -117,7 +117,7 @@ class IndexView(DataTableView):
             if self.has_role(settings.PROJECT_MANAGER_ROLE):
                 my_instances.append(instance)
 
-            elif hasattr(instance, 'user_id'):
+            elif hasattr(instance, "user_id"):
                  userid = instance.user_id
                  if (userid == user_acces.get_user(self.request).id):
                     my_instances.append(instance)
@@ -132,13 +132,15 @@ class DetailView(TemplateView):
     The monitoring view
     """
     template_name = "project/monitoring/detail.html"
-    redirect_url = 'horizon:project:monitoring:index'
+    redirect_url = "horizon:project:monitoring:index"
     page_title = _("Monitoring") 
 
     def get_context_data(self, instance_id, **kwargs):
         """
         Returns the charts
         """
+        context["instance_id"] = instance_id
+        
         project_day  = ProjectViewDay()
         project_week = ProjectViewWeek()
         project_hour = ProjectViewHour()
@@ -147,9 +149,9 @@ class DetailView(TemplateView):
         context = project_day.get_context_data(instance_id, **kwargs)
         context = project_week.get_context_data(instance_id, **kwargs)
 
-        context['charts_daily']  = project_day._get_charts_data_daily(instance_id)
-        context['charts_weekly'] = project_week._get_charts_data_weekly(instance_id)
-        context['charts_hourly'] = project_hour._get_charts_data_hourly(instance_id)
+        context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
+        context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
+        context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
 
         return context
 
@@ -166,7 +168,7 @@ class ProjectViewHour(TemplateView):
         Returns the hourly statistics
         """
         context = super(ProjectViewHour, self).get_context_data(**kwargs)
-        context['charts_hourly'] = self._get_charts_data_hourly(instance_id)
+        context["charts_hourly"] = self._get_charts_data_hourly(instance_id)
 
         return context
 
@@ -192,10 +194,10 @@ class ProjectViewHour(TemplateView):
         """  
         chart_sections_hourly = []
         for section in CHART_DEFS_HOUR:
-            chart_data_hourly = self._process_chart_section_hourly(section['charts_hourly'], instance_id)
+            chart_data_hourly = self._process_chart_section_hourly(section["charts_hourly"], instance_id)
             chart_sections_hourly.append({
-                'title': section['title'],
-                'charts_hourly': chart_data_hourly
+                "title": section["title"],
+                "charts_hourly": chart_data_hourly
             })
 
         return chart_sections_hourly
@@ -210,21 +212,21 @@ class ProjectViewHour(TemplateView):
             uuids_here = instance_id
             key = t.quota_key
             info = self.get_data(instance_id)
-            used = float(info[uuids_here][key]['hourly'])
+            used = float(info[uuids_here][key]["hourly"])
             quota = (100 - used)
-            text = pgettext_lazy('Label in the limit summary', 'Used')
+            text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = None
             quota_display = None
 
             charts_hourly.append({
-                'type': key,
-                'name': t.label,
-                'used': used,
-                'quota': quota,
-                'used_display': used_display,
-                'quota_display': quota_display,
-                'text': text
+                "type": key,
+                "name": t.label,
+                "used": used,
+                "quota": quota,
+                "used_display": used_display,
+                "quota_display": quota_display,
+                "text": text
             })
 
         return charts_hourly
@@ -243,7 +245,7 @@ class ProjectViewDay(TemplateView):
         Returns the daily statistics
         """  
         context = super(ProjectViewDay, self).get_context_data(**kwargs)
-        context['charts_daily'] = self._get_charts_data_daily(instance_id)
+        context["charts_daily"] = self._get_charts_data_daily(instance_id)
 
         return context
 
@@ -269,10 +271,10 @@ class ProjectViewDay(TemplateView):
         """  
         chart_sections_daily = []
         for section in CHART_DEFS_DAY:
-            chart_data_daily = self._process_chart_section_daily(section['charts_daily'], instance_id)
+            chart_data_daily = self._process_chart_section_daily(section["charts_daily"], instance_id)
             chart_sections_daily.append({
-                'title': section['title'],
-                'charts_daily': chart_data_daily
+                "title": section["title"],
+                "charts_daily": chart_data_daily
             })
 
         return chart_sections_daily
@@ -287,21 +289,21 @@ class ProjectViewDay(TemplateView):
             uuids = str(instance_id)
             key = t.quota_key
             info = self.get_data(instance_id)
-            used = float(info[uuids][key]['daily'])
+            used = float(info[uuids][key]["daily"])
             quota = (100 - used)
-            text = pgettext_lazy('Label in the limit summary', 'Used')
+            text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = "daily"
             quota_display = None
 
             charts_daily.append({
-                'type': key,
-                'name': t.label,
-                'used': used,
-                'quota': quota,
-                'used_display': used_display,
-                'quota_display': quota_display,
-                'text': text
+                "type": key,
+                "name": t.label,
+                "used": used,
+                "quota": quota,
+                "used_display": used_display,
+                "quota_display": quota_display,
+                "text": text
             })
 
         return charts_daily
@@ -320,7 +322,7 @@ class ProjectViewWeek(TemplateView):
         Returns the weekly statistics
         """  
         context = super(ProjectViewWeek, self).get_context_data(**kwargs)
-        context['charts_weekly'] = self._get_charts_data_weekly(instance_id)
+        context["charts_weekly"] = self._get_charts_data_weekly(instance_id)
 
         return context
 
@@ -346,10 +348,10 @@ class ProjectViewWeek(TemplateView):
         """
         chart_sections_weekly = []
         for section in CHART_DEFS_WEEK:
-            chart_data_weekly = self._process_chart_section_weekly(section['charts_weekly'], instance_id)
+            chart_data_weekly = self._process_chart_section_weekly(section["charts_weekly"], instance_id)
             chart_sections_weekly.append({
-                'title': section['title'],
-                'charts_weekly': chart_data_weekly
+                "title": section["title"],
+                "charts_weekly": chart_data_weekly
             })
             
         return chart_sections_weekly
@@ -365,21 +367,21 @@ class ProjectViewWeek(TemplateView):
             uuids = str(instance_id)
             key = t.quota_key
             info = self.get_data(instance_id)
-            used = float(info[uuids][key]['weekly'])            
+            used = float(info[uuids][key]["weekly"])            
             quota = (100 - used)
-            text = pgettext_lazy('Label in the limit summary', 'Used')
+            text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = "weekly"
             quota_display = None
 
             charts_weekly.append({
-                'type': key,
-                'name': t.label,
-                'used': used,
-                'quota': quota,
-                'used_display': used_display,
-                'quota_display': quota_display,
-                'text': text
+                "type": key,
+                "name": t.label,
+                "used": used,
+                "quota": quota,
+                "used_display": used_display,
+                "quota_display": quota_display,
+                "text": text
             })
 
         return charts_weekly
