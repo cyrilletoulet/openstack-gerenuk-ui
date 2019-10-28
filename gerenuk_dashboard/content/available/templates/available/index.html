@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n horizon %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+
+{% block title %}{% trans "Avaialble resources"%}{% endblock %}
+
+{% block main %}
+  <div class="table_wrapper">
+    <table width="300" id="alerts" class="table table-striped datatable tablesorter tablesorter-default">
+      <thead>
+	<tr class="table_column_header tablesorter-headerRow"> 
+	  <th class="sortable normal_column tablesorter-header" data-column="0" tabindex="0">
+	    <div class="tablesorter-header-inner">{% trans "Available" %}</div>
+	  </th>
+  
+          <th class="sortable normal_column tablesorter-header" data-column="1" tabindex="0">
+            <div class="tablesorter-header-inner">{% trans "Flavor name" %}</div>
+          </th>
+	</tr>
+      </thead>
+      
+      <tbody>
+        {% for k,v in flavor_data.items %}
+	<tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"> 
+ 	  <td class="sortable normal_column">{{ k }}</td>
+          <td class="sortable normal_column">{{ v }}</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
