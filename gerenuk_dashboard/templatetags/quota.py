@@ -16,9 +16,10 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Mon Oct 28 11:27:06 CET 2019
+# Mon Oct 28 11:27:06 CET 2019
 
 from django import template
+
 
 register = template.Library()
 
@@ -28,4 +29,3 @@ def quotapercenti(used, quota):
     Tag to calculate statistics
     """
     return round(float(used) / float(quota) * 100)
-
