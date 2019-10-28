@@ -45,7 +45,7 @@ CHART_DEFS_HOUR = [
         "title": _("Monitoring Hourly"),
         "charts_hourly": [
             ChartDefHour("mem", _("Memory"), None, None),
-            ChartDefHour("vcpu", _("Vcpu"), None, None),
+            ChartDefHour("vcpu", _("vCPU"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
         ]
     }
@@ -61,7 +61,7 @@ CHART_DEFS_WEEK = [
         "title": _("Monitoring Weekly"),
         "charts_weekly": [
             ChartDefHour("mem", _("Memory"), None, None),
-            ChartDefHour("vcpu", _("Vcpu"), None, None),
+            ChartDefHour("vcpu", _("vCPU"), None, None),
             ChartDefHour("cpu", _("CPU"), None, None),
         ]
     }
@@ -77,7 +77,7 @@ CHART_DEFS_DAY = [
         "title": _("Monitoring Daily"),
         "charts_daily": [
             ChartDefDay("mem", _("Memory"), None, None),
-            ChartDefDay("vcpu", _("Vcpu"), None, None),
+            ChartDefDay("vcpu", _("vCPU"), None, None),
             ChartDefDay("cpu", _("CPU"), None, None),
         ]
     }
@@ -139,16 +139,13 @@ class DetailView(TemplateView):
         """
         Returns the charts
         """
-        context["instance_id"] = instance_id
+        context = super(DetailView, self).get_context_data(**kwargs)
         
         project_day  = ProjectViewDay()
         project_week = ProjectViewWeek()
         project_hour = ProjectViewHour()
 
-        context = project_hour.get_context_data(instance_id, **kwargs)
-        context = project_day.get_context_data(instance_id, **kwargs)
-        context = project_week.get_context_data(instance_id, **kwargs)
-
+        context["instance_id"] = instance_id
         context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
         context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
         context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
