@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri Oct 25 13:48:50 CEST 2019
+# Mon 28 Oct 15:58:04 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -40,6 +40,7 @@ class AvailableResourcesView(TemplateView):
     The available resources view.
     """
     template_name = "project/available/index.html"
+    page_title = _("Avaialble resources")
 
 
     def get_context_data(self, **kwargs):
@@ -47,6 +48,7 @@ class AvailableResourcesView(TemplateView):
         Return the flavor_data context
         """
         context = super(AvailableResourcesView, self).get_context_data(**kwargs)
+        context['page_title'] = self.page_title
         context['flavor_data'] = self.get_flavor(self)
         return context
 
@@ -56,7 +58,7 @@ class AvailableResourcesView(TemplateView):
         Return the available flavors
         """
         # Used if under Rocky release
-        #nova = _nova.novaclient(self.request)
+        #nova_client = _nova.novaclient(self.request)
         nova_client = nova.novaclient(self.request)
         hypervisors_list = dict()
         flavor_data = dict()

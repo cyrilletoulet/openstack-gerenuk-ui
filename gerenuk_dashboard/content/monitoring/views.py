@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 28 Oct 13:21:38 CET 2019
+# Mon 28 Oct 15:32:54 CET 2019
 
 import gerenuk
 import collections
@@ -133,7 +133,7 @@ class DetailView(TemplateView):
     """
     template_name = "project/monitoring/detail.html"
     redirect_url = "horizon:project:monitoring:index"
-    page_title = _("Monitoring") 
+    page_title = _("Monitoring")
 
     def get_context_data(self, instance_id, **kwargs):
         """
@@ -145,7 +145,7 @@ class DetailView(TemplateView):
         project_week = ProjectViewWeek()
         project_hour = ProjectViewHour()
 
-        context["instance_id"] = instance_id
+        context['page_title'] = instance_id
         context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
         context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
         context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
