@@ -22,16 +22,16 @@ from django.utils.translation import ugettext_lazy as _
 
 
 # The slug of the dashboard the PANEL associated with
-PANEL_DASHBOARD = 'project'
+PANEL_DASHBOARD = "project"
 
 # The slug of the panel group the PANEL is associated with
-PANEL_GROUP = 'information'
+PANEL_GROUP = "information"
 
 # The slug of the panel to be added to HORIZON_CONFIG
-PANEL = 'monitoring'
+PANEL = "monitoring"
 
 # Python panel class of the PANEL to be added
-ADD_PANEL = 'gerenuk_dashboard.content.monitoring.panel.Monitoring'
+ADD_PANEL = "gerenuk_dashboard.content.monitoring.panel.Monitoring"
 
 # Automatically discover static resources in installed apps
 AUTO_DISCOVER_STATIC_FILES = True

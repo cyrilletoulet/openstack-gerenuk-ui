@@ -16,19 +16,19 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 21 Oct 14:25:18 CEST 2019
+# Tue 29 Oct 10:03:48 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 
 
 # The slug of the dashboard the PANEL_GROUP associated with
-PANEL_GROUP_DASHBOARD = 'project'
+PANEL_GROUP_DASHBOARD = "project"
 
 # The slug of the panel group to be added to HORIZON_CONFIG
-PANEL_GROUP = 'information'
+PANEL_GROUP = "information"
 
 # The display name of the PANEL_GROUP
-PANEL_GROUP_NAME = _('Information')
+PANEL_GROUP_NAME = _("Information")
 
 # Add the dashboard to the installed apps
 ADD_INSTALLED_APPS = ["gerenuk_dashboard", ]
