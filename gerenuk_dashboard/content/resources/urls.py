@@ -16,12 +16,13 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-#Mon Oct 28 10:56:56 CET 2019
+# Tue 29 Oct 09:51:24 CET 2019
 
 from django.conf.urls import url
 from gerenuk_dashboard.content.resources import views
 
+
 # Define URL patterns
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-]   
+    url(r"^$", views.IndexView.as_view(), name="index"),
+]

@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon Oct 28 14:17:51 CET 2019 
+# Tue 29 Oct 09:42:50 CET 2019
 
 from django.conf import settings
 from django.template import defaultfilters as filters
@@ -29,20 +29,20 @@ from horizon import tables
 from openstack_dashboard import api
 from openstack_dashboard.views import get_url_with_pagination
 
+
 # Constants
 STATUS_CHOICES = (
-        ("in-use", True),
-        ("available", True),
-        ("creating", None),
-        ("error", False),
-        ("error_extending", False),
-    )
+    ("in-use", True),
+    ("available", True),
+    ("creating", None),
+    ("error", False),
+    ("error_extending", False),
+)
 
 TYPE_CHOICES = (
-        ("snapshot", pgettext_lazy("Type of an image", u"Snapshot")),
-        ("image", pgettext_lazy("Type of an image", u"Image")),
-
-    )
+    ("snapshot", pgettext_lazy("Type of an image", u"Snapshot")),
+    ("image", pgettext_lazy("Type of an image", u"Image")),
+)
 
 
 # Functions
@@ -54,7 +54,7 @@ def get_monitoring_detail_link(obj, request):
         request,
         InstancesTable._meta.pagination_param,
         InstancesTable._meta.prev_pagination_param,
-        'horizon:project:monitoring:detail', 
+        "horizon:project:monitoring:detail", 
         obj.id
     )
 
@@ -77,7 +77,7 @@ def get_tenant_id(volume):
         tenant_id = volume.id
         return tenant_id
     else:
-        return ('not available')
+        return ("not available")
 
 
 def get_snapshot_id(image):
@@ -89,18 +89,18 @@ def get_snapshot_id(image):
       
         return snapshot_id
     else:
-        return ('not available')
+        return ("not available")
 
 
 def get_type(image):
     """
     Get image/snapshot type.
     """
-    if image.properties.get('image_type') == 'snapshot':
-        return image.properties.get('image_type')
-        return 'snapshot'
+    if image.properties.get("image_type") == "snapshot":
+        return image.properties.get("image_type")
+        return "snapshot"
     else:
-        return 'image'
+        return "image"
 
 
 def get_image_id(image):
@@ -126,9 +126,10 @@ class InstancesTable(tables.DataTable):
     """
     name = tables.Column("name", verbose_name=_("Name"), link=get_server_detail_link)
     status = tables.Column("status", verbose_name=_("Status"))
-    image_name = tables.Column('image_name', verbose_name=_("Image Name"))
+    image_name = tables.Column("image_name", verbose_name=_("Image Name"))
     instance_id = tables.Column(get_instance_id, verbose_name=_("Instance Id"), link=get_monitoring_detail_link)
 
+    
     class Meta(object):
         """
         Define metadata.
@@ -145,7 +146,7 @@ class VolumesTable(tables.DataTable):
     """
     name = tables.Column("name", verbose_name=_("Name"))
     description = tables.Column("description", verbose_name=_("Description"))
-    size = tables.Column(get_size, verbose_name=_("Size"), attrs={'data-type': 'size'})
+    size = tables.Column(get_size, verbose_name=_("Size"), attrs={"data-type": "size"})
     status = tables.Column("status", filters=(filters.title,),verbose_name=_("Status"),status=True,status_choices=STATUS_CHOICES)
     project = tables.Column(get_tenant_id, verbose_name=_("ID"))
 
@@ -153,6 +154,7 @@ class VolumesTable(tables.DataTable):
     def get_object_display(self, obj):
         return obj.name
 
+    
     class Meta:
         """
         Define metadata.

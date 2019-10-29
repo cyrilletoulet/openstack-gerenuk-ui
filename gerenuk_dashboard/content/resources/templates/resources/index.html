@@ -1,39 +1,29 @@
 {% extends 'base.html' %}
-
 {% load i18n horizon %}
 {% load i18n %}
 {% load i18n breadcrumb_nav %}
 {% load i18n sizeformat %}
 
+{% block title %}{{ page_title }}{% endblock %}
 
-{% block title %}{% trans "My Resources"%}{% endblock %}
 {% block main %}
+  <div>
+    <h2> {% trans "Instances" %}</h2>
+    {{ instances_table.render }}
+  </div>
 
- <div>
- <span style="color:red"> {% trans "Instances" %}</span>
+  <div>
+    <h2>{% trans "Volumes" %}</h2>
+    {{ volumes_table.render }}
+  </div>
 
-     {{ instances_table.render }}
+  <div>
+    <h2>{% trans "Snapshots" %}</h2>
+    {{ snapshots_table.render }}
+  </div>
 
-       </div>
-
-       <div>
-       <span style="color:red">{% trans "Volumes" %}</span>
-
-          {{ volumes_table.render }}
-     </div>
-
-       <div>
-       <span style="color:red">{% trans "Snapshots" %} </span>
-
-          {{ snapshots_table.render }}
-     </div>
-
-
-       <div>
-      <span style="color:red">{% trans "Project Images" %} </span>
-
-        {{ imgs_table.render }}
-</div>
-
- {% endblock %}
-
+  <div>
+    <h2>{% trans "Project Images" %}</h2>
+    {{ imgs_table.render }}
+  </div>
+{% endblock %}
