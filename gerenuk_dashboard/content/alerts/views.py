@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 22 Oct 15:52:30 CEST 2019
+# Tue 29 Oct 09:59:44 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -40,7 +40,7 @@ class AlertsTables(MultiTableView):
         tables.ProjectAlertsTable,
         tables.UserAlertsTable,
     )
-    template_name = 'project/alerts/index.html'
+    template_name = "project/alerts/index.html"
     page_title = _("Alerts")
 
 
@@ -51,7 +51,7 @@ class AlertsTables(MultiTableView):
         roles = user_acces.get_user(self.request).roles
 
         for r in roles:
-            if r['name'] == name :
+            if r["name"] == name :
                 return True
 
         return False

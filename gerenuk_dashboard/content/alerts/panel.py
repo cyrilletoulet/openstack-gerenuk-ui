@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 22 Oct 08:55:55 CEST 2019
+# Tue 29 Oct 09:59:21 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 import horizon
@@ -28,5 +28,5 @@ class Alerts(horizon.Panel):
     """
     name = _("Alerts")
     slug = "alerts"
-    permissions = ('openstack.services.compute',)
+    permissions = ("openstack.services.compute",)
 

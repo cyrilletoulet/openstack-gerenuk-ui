@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri Oct 25 13:10:45 CEST 2019
+# Tue 29 Oct 10:00:37 CET 2019
 
 from django.conf.urls import url
 from gerenuk_dashboard.content.monitoring import views
@@ -25,6 +25,6 @@ from gerenuk_dashboard.content.monitoring import views
 
 # Define URL patterns
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    url(r'^(?P<instance_id>[^/]+)/$',views.DetailView.as_view(), name='detail'),
+    url(r"^$", views.IndexView.as_view(), name="index"),
+    url(r"^(?P<instance_id>[^/]+)/$",views.DetailView.as_view(), name="detail"),
 ]

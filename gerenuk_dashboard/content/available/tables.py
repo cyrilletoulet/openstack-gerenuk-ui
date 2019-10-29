@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu 24 Oct 16:37:51 CEST 2019
+# Tue 29 Oct 09:57:38 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 from horizon import tables
@@ -27,7 +27,7 @@ class AvailableResourcesTable(tables.DataTable):
     """
     The horizon table used to display available resources.
     """
-    id = tables.Column('id', verbose_name=_("Flavor id"))
+    id = tables.Column("id", verbose_name=_("Flavor id"))
     name = tables.Column("name", verbose_name=_("Flavor name"))
     available = tables.Column("available", verbose_name=_("Available instances"))
 
@@ -38,4 +38,4 @@ class AvailableResourcesTable(tables.DataTable):
         """
         name = "flavors"
         verbose_name = _("Flavors")
-        columns = ('id', 'name', 'available')
+        columns = ("id", "name", "available")
