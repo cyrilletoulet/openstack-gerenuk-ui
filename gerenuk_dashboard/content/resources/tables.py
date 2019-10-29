@@ -146,8 +146,8 @@ class InstancesTable(tables.DataTable):
     """
     name = tables.Column("name", verbose_name=_("Name"), link=get_server_detail_link)
     status = tables.Column("status", verbose_name=_("Status"))
-    image_name = tables.Column("image_name", verbose_name=_("Image Name"))
-    instance_id = tables.Column(get_instance_id, verbose_name=_("Instance Id"), link=get_monitoring_detail_link)
+    image_name = tables.Column("image_name", verbose_name=_("Image name"))
+    instance_id = tables.Column(get_instance_id, verbose_name=_("Instance monitoring"), link=get_monitoring_detail_link)
 
     
     class Meta(object):
