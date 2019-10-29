@@ -95,12 +95,16 @@ class IndexView(MultiTableView):
         try:
             snapshots = api.glance.image_list_detailed(self.request)
             for s in snapshots[0]:
-                if all(getattr(s, attr) == value for (attr, value) in filters.items()) and s.properties.get("image_type") == "snapshot" and s.properties.get("user_id") == userid:
-                    snapshots_list.append(s)
+
+                if s.properties.get("image_type") == "snapshot":
+                   if (s.properties.get("user_id") == userid) or all(getattr(s, attr) == value for (attr, value) in filters.items()) and self.has_role(settings.PROJECT_MANAGER_ROLE) :
+
+                      snapshots_list.append(s)
 
             return snapshots_list
 
         except Exception:
+            snapshots_list = []
             exceptions.handle(self.request,_("Unable to retrieve snapshots"))
 
 
