@@ -143,7 +143,7 @@ class VolumesTable(tables.DataTable):
     """
     The horizon table used to display user volumes.
     """
-    name = tables.Column("name", verbose_name=_("Name"))
+    name = tables.Column("name", verbose_name=_("Name"),link="horizon:project:volumes:detail")
     description = tables.Column("description", verbose_name=_("Description"))
     size = tables.Column(get_size, verbose_name=_("Size"), attrs={'data-type': 'size'})
     status = tables.Column("status", filters=(filters.title,),verbose_name=_("Status"),status=True,status_choices=STATUS_CHOICES)
