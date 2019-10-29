@@ -57,7 +57,7 @@ class IndexView(MultiTableView):
         Getter used by InstancesTable model.
         """
         instances_list = []
-        instances = api.nova.server_list(self.request)
+        instances, self._more = api.nova.server_list(self.request)
         for i in instances:
                 if hasattr(i, 'user_id'):
                     
