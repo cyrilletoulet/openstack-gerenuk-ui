@@ -87,13 +87,14 @@ class IndexView(MultiTableView):
         """
         Getter used by SnapshotsTable model.
         """
-        filters = {"visibility": u"private"}
+        owner = user_acces.get_user(self.request).project_id
+        filters = {'visibility': u'private', 'owner' : owner}
         snapshots_list = list()
-        
+
         try:
             snapshots = api.glance.image_list_detailed(self.request)
             for s in snapshots[0]:
-                if all(getattr(s, attr) == value for (attr, value) in filters.items()):
+                if all(getattr(s, attr) == value for (attr, value) in filters.items()) and s.properties.get("image_type") == "snapshot":
                     snapshots_list.append(s)
 
             return snapshots_list
