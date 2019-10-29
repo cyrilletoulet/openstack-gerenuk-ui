@@ -110,7 +110,7 @@ class IndexView(MultiTableView):
         Getter used by ImagesTable model.
         """
         filters = {'visibility': u'public'}
-        imgages_list = list()
+        images_list = list()
 
         try:
             images = api.glance.image_list_detailed(self.request)
@@ -123,5 +123,4 @@ class IndexView(MultiTableView):
 
         except Exception:
 
-            exceptions.handle(self.request,
-                              _("Unable to retrieve images"))
+            exceptions.handle(self.request,_("Unable to retrieve images"))
