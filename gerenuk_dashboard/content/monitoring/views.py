@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:20:24 CET 2019
+# Tue 29 Oct 10:00:48 CET 2019
 
 import gerenuk
 import collections
@@ -147,7 +147,7 @@ class DetailView(TemplateView):
             project_week = ProjectViewWeek()
             project_hour = ProjectViewHour()
 
-            context['page_title'] = instance_id
+            context["page_title"] = instance_id
             context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
             context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
             context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)

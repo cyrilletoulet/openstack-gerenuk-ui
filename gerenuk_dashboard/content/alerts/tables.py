@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed 23 Oct 12:57:17 CEST 2019
+# Tue 29 Oct 09:59:01 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -55,7 +55,7 @@ def get_severity(alert_named):
     :param alert_named: (namedtuple) The alert named tuple
     :return: (str) The severity string
     """
-    return SEVERITY.get(getattr(alert_named, "severity", 0), '')
+    return SEVERITY.get(getattr(alert_named, "severity", 0), "")
 
 
 # Classes
@@ -114,12 +114,12 @@ class UserAlertsTable(tables.DataTable):
     """
     The horizon table used to display user alerts.
     """
-    uuid = tables.Column("uuid", verbose_name=_("User's ID"))
+    uuid = tables.Column("uuid", verbose_name=_("User"s ID"))
     if get_language() == "fr":
-        message = tables.Column('message_fr', verbose_name=_("Message"))
+        message = tables.Column("message_fr", verbose_name=_("Message"))
     else:
-        message = tables.Column('message_en', verbose_name=_("Message"))
-    id = tables.Column('id', verbose_name=_("Id "))
+        message = tables.Column("message_en", verbose_name=_("Message"))
+    id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Created "))
 
@@ -213,10 +213,10 @@ class ProjectAlertsTable(tables.DataTable):
     """
     project = tables.Column("project", verbose_name=_("Project"))
     if get_language() == "fr":
-        message = tables.Column('message_fr', verbose_name=_("Message"))
+        message = tables.Column("message_fr", verbose_name=_("Message"))
     else:
-        message = tables.Column('message_en', verbose_name=_("Message"))
-    id = tables.Column('id', verbose_name=_("Id "))
+        message = tables.Column("message_en", verbose_name=_("Message"))
+    id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Created "))
 

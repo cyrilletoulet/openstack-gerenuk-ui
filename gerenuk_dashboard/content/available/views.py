@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 28 Oct 15:58:04 CET 2019
+# Tue 29 Oct 09:58:23 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -48,8 +48,8 @@ class AvailableResourcesView(TemplateView):
         Return the flavor_data context
         """
         context = super(AvailableResourcesView, self).get_context_data(**kwargs)
-        context['page_title'] = self.page_title
-        context['flavor_data'] = self.get_flavor(self)
+        context["page_title"] = self.page_title
+        context["flavor_data"] = self.get_flavor(self)
         return context
 
 

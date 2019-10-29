@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu 24 Oct 16:37:10 CEST 2019
+# Tue 29 Oct 09:57:49 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 import horizon
@@ -28,4 +28,4 @@ class AvailableResources(horizon.Panel):
     """
     name = _("Available resources")
     slug = "available"
-    permissions = ('openstack.services.compute',)
+    permissions = ("openstack.services.compute",)

@@ -16,12 +16,11 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu 24 Oct 16:36:04 CEST 2019
+# Tue 29 Oct 09:58:02 CET 2019
 
 from django.conf.urls import url
 from gerenuk_dashboard.content.available import views
 
-
 urlpatterns = [
-      url(r'^$', views.AvailableResourcesView.as_view(), name='index'),
+      url(r"^$", views.AvailableResourcesView.as_view(), name="index"),
 ]
