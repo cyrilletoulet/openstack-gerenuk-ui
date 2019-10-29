@@ -17,12 +17,13 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 28 Oct 15:32:54 CET 2019
+# Tue 29 Oct 09:20:24 CET 2019
 
 import gerenuk
 import collections
 
 from horizon.tables import DataTableView
+from django.urls import reverse
 from horizon import exceptions
 
 from django.conf import settings
@@ -140,16 +141,22 @@ class DetailView(TemplateView):
         Returns the charts
         """
         context = super(DetailView, self).get_context_data(**kwargs)
+
+        try:
+            project_day  = ProjectViewDay()
+            project_week = ProjectViewWeek()
+            project_hour = ProjectViewHour()
+
+            context['page_title'] = instance_id
+            context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
+            context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
+            context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
+            
+        except Exception:
+            msg = _("Unable to retrieve instance.")
+            redirect = reverse(self.redirect_url)
+            exceptions.handle(self.request, msg, redirect=redirect)
         
-        project_day  = ProjectViewDay()
-        project_week = ProjectViewWeek()
-        project_hour = ProjectViewHour()
-
-        context['page_title'] = instance_id
-        context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
-        context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
-        context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
-
         return context
 
 
