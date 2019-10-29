@@ -114,7 +114,7 @@ class UserAlertsTable(tables.DataTable):
     """
     The horizon table used to display user alerts.
     """
-    uuid = tables.Column("uuid", verbose_name=_("User"s ID"))
+    uuid = tables.Column("uuid", verbose_name=_("User's ID"))
     if get_language() == "fr":
         message = tables.Column("message_fr", verbose_name=_("Message"))
     else:

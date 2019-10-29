@@ -46,6 +46,19 @@ TYPE_CHOICES = (
 
 
 # Functions
+def get_server_detail_link(obj, request):
+    """
+    Redirection to instance details
+    """
+    return get_url_with_pagination(
+        request,
+        InstancesTable._meta.pagination_param,
+        InstancesTable._meta.prev_pagination_param,
+        "horizon:project:instances:detail", 
+        obj.id
+    )
+
+
 def get_monitoring_detail_link(obj, request):
     """
     Redirection to monitoring details
@@ -80,19 +93,26 @@ def get_tenant_id(volume):
         return ("not available")
 
 
+def get_volume_size(volume):
+    """
+    Get volume size.
+    """
+    return _("%sGB") % volume.size
+
+
 def get_snapshot_id(image):
     """
     Get snapshot id.
     """
     if hasattr(image, "id"):
-       snapshot_id = image.id
+        snapshot_id = image.id
       
         return snapshot_id
     else:
         return ("not available")
 
 
-def get_type(image):
+def get_image_type(image):
     """
     Get image/snapshot type.
     """
@@ -146,7 +166,7 @@ class VolumesTable(tables.DataTable):
     """
     name = tables.Column("name", verbose_name=_("Name"),link="horizon:project:volumes:detail")
     description = tables.Column("description", verbose_name=_("Description"))
-    size = tables.Column(get_size, verbose_name=_("Size"), attrs={"data-type": "size"})
+    size = tables.Column(get_volume_size, verbose_name=_("Size"), attrs={"data-type": "size"})
     status = tables.Column("status", filters=(filters.title,),verbose_name=_("Status"),status=True,status_choices=STATUS_CHOICES)
     project = tables.Column(get_tenant_id, verbose_name=_("ID"))
 
@@ -171,7 +191,7 @@ class SnapshotsTable(tables.DataTable):
     """
     name = tables.WrappingColumn(get_image_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description",verbose_name=_("Description"))
-    snapshot_type = tables.Column(get_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
+    snapshot_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
     snapshot_id= tables.Column(get_snapshot_id,verbose_name=_("Snapshot ID"))
 
 
@@ -190,7 +210,7 @@ class ImagesTable(tables.DataTable):
     """
     name = tables.WrappingColumn(get_image_name, verbose_name=_("Snap Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description", verbose_name=_("Description"))
-    image_type = tables.Column(get_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
+    image_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
     image_id = tables.Column(get_image_id, verbose_name=_("Image Id"))
 
 
