@@ -76,9 +76,9 @@ class IndexView(MultiTableView):
         filters = {'user_id': userid}
 
         cinder = api.cinder.cinderclient(self.request, version=VERSION)
-        volumes = cinder.volumes.list()
+        unfiltred_volumes = cinder.volumes.list()
         volumes_list = list()
-        for v in volumes: 
+        for v in unfiltred_volumes: 
             if all(getattr(v, attr) == value for (attr, value) in filters.items()):
                 volumes_list.append(v)
 
