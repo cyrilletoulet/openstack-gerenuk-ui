@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:59:44 CET 2019
+# Mon  4 Nov 13:12:06 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -28,7 +28,7 @@ from openstack_auth import utils as user_acces
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from horizon.tables import MultiTableView, , DataTableView
+from horizon.tables import MultiTableView, DataTableView
 from gerenuk_dashboard.content.alerts import tables
 
 
