@@ -237,3 +237,33 @@ class ProjectAlertsTable(tables.DataTable):
         status_columns = ["severity",]
         table_actions = (MarkProjectAlertsAsRead,)
         row_actions = (MarkProjectAlertsAsRead,)
+
+
+class ReadAlertsTable(tables.DataTable):
+    """
+    The horizon table used to display read alerts.
+    """
+    project = tables.Column("project", verbose_name=_("Project"))
+    if get_language() == "fr":
+        message = tables.Column('message_fr', verbose_name=_("Message"))
+    else:
+        message = tables.Column('message_en', verbose_name=_("Message"))
+    id = tables.Column('id', verbose_name=_("Id "))
+    severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
+    created = tables.Column("timestamp" , verbose_name=_("Created "))
+
+
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+
+
+    class Meta(object):
+        """
+        Define metadata.
+        """
+        name = "read_alerts"
+        verbose_name = _("Read alerts")
+        status_columns = ["severity",]

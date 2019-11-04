@@ -25,4 +25,5 @@ from gerenuk_dashboard.content.alerts import views
 # Define URL patterns
 urlpatterns = [
     url(r"^$", views.AlertsTables.as_view(), name ="index"),
+    url(r'^read/$', views.ReadAlerts.as_view(), name ='read'),
 ]

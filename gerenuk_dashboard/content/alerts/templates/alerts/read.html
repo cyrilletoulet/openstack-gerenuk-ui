@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+{% load horizon i18n bootstrap %}
+
+{% block title %}{% trans "Read Alerts"%}{% endblock %}
+
+{% block main %}
+  <h2>Alerts</h2>
+  <div>
+    {{ read_alerts_table.render }}
+  </div>
+
+
+{% endblock %}
+
