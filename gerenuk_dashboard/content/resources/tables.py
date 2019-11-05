@@ -219,5 +219,4 @@ class ImagesTable(tables.DataTable):
         Define metadata.
         """
         name = "images"
-        status_columns = ["status"]
         verbose_name = _("Images")
