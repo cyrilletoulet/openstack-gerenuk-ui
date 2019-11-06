@@ -136,29 +136,57 @@ class DetailView(TemplateView):
     redirect_url = "horizon:project:monitoring:index"
     page_title = _("Monitoring")
 
-    def get_context_data(self, instance_id, **kwargs):
+    def has_permission(self, request, instance_id):
+        """
+        Check if user have permission to access instances
+        """
+        i = api.nova.server_get(request,instance_id)
+        userid = user_acces.get_user(request).id
+        tenant_id = user_acces.get_user(request).project_id
+        roles = user_acces.get_user(request).roles
+        my_role = []
+    
+        for r in roles :
+            my_role.append(str(r["name"]))
+
+        if (i.user_id == userid) or (i.tenant_id == tenant_id) and (settings.PROJECT_MANAGER_ROLE in my_role) :
+
+                return True
+        else :
+                return False
+
+
+    def get_context_data(self,instance_id, **kwargs):
         """
         Returns the charts
         """
         context = super(DetailView, self).get_context_data(**kwargs)
+        obj = DetailView()
 
         try:
-            project_day  = ProjectViewDay()
-            project_week = ProjectViewWeek()
-            project_hour = ProjectViewHour()
+           if obj.has_permission(self.request, instance_id) :
+              project_day  = ProjectViewDay()
+              project_week = ProjectViewWeek()
+              project_hour = ProjectViewHour()
 
-            context["page_title"] = instance_id
-            context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
-            context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
-            context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
-            
+              #Project used for test in detail.html
+              #context["project"] = test.get_user(self.request, instance_id)
+              context["page_title"] = instance_id
+              context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
+              context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
+              context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
+
+           else :
+              msg = _("Unable to retrieve instance.")
+              redirect = reverse(self.redirect_url)
+              exceptions.handle(self.request, msg, redirect=redirect)
+
         except Exception:
             msg = _("Unable to retrieve instance.")
             redirect = reverse(self.redirect_url)
             exceptions.handle(self.request, msg, redirect=redirect)
-        
-        return context
 
+        return context
 
 
 class ProjectViewHour(TemplateView):
