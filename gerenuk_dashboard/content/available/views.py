@@ -17,20 +17,15 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:58:23 CET 2019
+# Thu  7 Nov 16:46:24 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
 
+from openstack_auth import user
 from openstack_dashboard import api
 from openstack_dashboard import policy
-
-# Used if under Rocky release
-#from openstack_dashboard.api import _nova
 from openstack_dashboard.api import nova
-
-from openstack_auth import user
-from openstack_auth import utils as user_acces
 
 from collections import namedtuple
 
@@ -57,8 +52,6 @@ class AvailableResourcesView(TemplateView):
         """
         Return the available flavors
         """
-        # Used if under Rocky release
-        #nova_client = _nova.novaclient(self.request)
         nova_client = nova.novaclient(self.request)
         hypervisors_list = dict()
         flavor_data = dict()
