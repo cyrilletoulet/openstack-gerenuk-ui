@@ -59,7 +59,6 @@ class InstancesTable(tables.DataTable):
     The horizon table used to display instance.
     """
     name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
-    instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
     image_name = tables.Column("image_name", verbose_name=_("Image"))
     status = tables.Column("status", verbose_name=_("Status"))
 
@@ -72,7 +71,10 @@ class InstancesTable(tables.DataTable):
             instid = instance.id
         return instid
 
+    
+    instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
 
+    
     class Meta(object):
         """
         Define metadata.
