@@ -22,7 +22,7 @@
 import gerenuk
 import gerenuk.api
 
-from openstack_auth import utils as user_acces
+from openstack_auth import utils as os_auth
 
 from django.conf import settings
 from django.utils.translation import get_language
@@ -99,7 +99,7 @@ class MarkUserAlertsAsRead(tables.DeleteAction):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(request).project_id
+        project = os_auth.get_user(request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         read_ids = list()
 
@@ -185,7 +185,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
         """
         Define if the current user is allowed to mark alerts as read.
         """
-        roles = user_acces.get_user(request).roles
+        roles = os_auth.get_user(request).roles
         
         for r in roles :
             if r["name"] == settings.PROJECT_MANAGER_ROLE:
@@ -202,7 +202,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(request).project_id
+        project = os_auth.get_user(request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         read_ids = list()
         
@@ -245,6 +245,7 @@ class ProjectAlertsTable(tables.DataTable):
         row_actions = (MarkProjectAlertsAsRead,)
 
 
+        
 class ReadAlertsTable(tables.DataTable):
     """
     The horizon table used to display read alerts.
