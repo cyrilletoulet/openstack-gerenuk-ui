@@ -32,6 +32,7 @@ from django.utils.translation import pgettext_lazy
 from django.views.generic import TemplateView
 
 from gerenuk_dashboard.content.monitoring import tables
+from gerenuk_dashboard.content.exceptions import PermissionsError
 from openstack_dashboard import api
 from openstack_auth import utils as user_acces
 
@@ -144,13 +145,15 @@ class DetailView(TemplateView):
         tenant_id = user_acces.get_user(request).project_id
         roles = [str(role["name"]) for role in user_acces.get_user(request).roles]
 
-        if settings.PROJECT_MANAGER_ROLE in roles and ((instance.user_id == user_id) or (instance.tenant_id == tenant_id)):
+        if instance.tenant_id == tenant_id and (
+            instance.user_id == user_id or settings.PROJECT_MANAGER_ROLE in roles
+        ):
             return True
         
         return False
 
 
-    def get_context_data(self,instance_id, **kwargs):
+    def get_context_data(self, instance_id, **kwargs):
         """
         Returns the charts
         """
@@ -170,12 +173,15 @@ class DetailView(TemplateView):
               context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
 
            else:
-              msg = _("Unable to retrieve instance.")
-              redirect = reverse(self.redirect_url)
-              exceptions.handle(self.request, msg, redirect=redirect)
+              raise PermissionsError()
 
+        except PermissionsError:
+            msg = _("Insufficient permissions.")
+            redirect = reverse(self.redirect_url)
+            exceptions.handle(self.request, msg, redirect=redirect)
+            
         except Exception:
-            msg = _("Unable to retrieve instance.")
+            msg = _("Unable to retrieve instance monitoring.")
             redirect = reverse(self.redirect_url)
             exceptions.handle(self.request, msg, redirect=redirect)
 
