@@ -4,14 +4,11 @@
 {% load i18n sizeformat %}
 {% load horizon i18n bootstrap %}
 
-{% block title %}{% trans "Read Alerts"%}{% endblock %}
+{% block title %}{% trans "Read alerts"%}{% endblock %}
 
 {% block main %}
   <h2>Alerts</h2>
   <div>
     {{ read_alerts_table.render }}
   </div>
-
-
 {% endblock %}
-
