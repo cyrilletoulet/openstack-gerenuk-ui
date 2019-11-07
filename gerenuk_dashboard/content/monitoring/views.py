@@ -31,10 +31,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.views.generic import TemplateView
 
+from openstack_dashboard import api
+from openstack_auth import utils as os_auth
 from gerenuk_dashboard.content.monitoring import tables
 from gerenuk_dashboard.content.exceptions import PermissionsError
-from openstack_dashboard import api
-from openstack_auth import utils as user_acces
 
 # Charts definition
 ChartDefHour = collections.namedtuple(
@@ -99,7 +99,7 @@ class IndexView(DataTableView):
         """
         Check if the current user has a given role
         """
-        roles = user_acces.get_user(self.request).roles
+        roles = os_auth.get_user(self.request).roles
 
         for r in roles:
             if r["name"] == name:
@@ -121,7 +121,7 @@ class IndexView(DataTableView):
 
             elif hasattr(instance, "user_id"):
                  userid = instance.user_id
-                 if (userid == user_acces.get_user(self.request).id):
+                 if (userid == os_auth.get_user(self.request).id):
                     my_instances.append(instance)
 
         return my_instances
@@ -141,9 +141,9 @@ class DetailView(TemplateView):
         Check if user have permission to access instances
         """
         instance = api.nova.server_get(request, instance_id)
-        user_id = user_acces.get_user(request).id
-        tenant_id = user_acces.get_user(request).project_id
-        roles = [str(role["name"]) for role in user_acces.get_user(request).roles]
+        user_id = os_auth.get_user(request).id
+        tenant_id = os_auth.get_user(request).project_id
+        roles = [str(role["name"]) for role in os_auth.get_user(request).roles]
 
         if instance.tenant_id == tenant_id and (
             instance.user_id == user_id or settings.PROJECT_MANAGER_ROLE in roles
