@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 10:00:48 CET 2019
+# Thu  7 Nov 08:24:37 CET 2019
 
 import gerenuk
 import collections
@@ -128,7 +128,6 @@ class IndexView(DataTableView):
 
 
 class DetailView(TemplateView):
-
     """
     The monitoring view
     """
@@ -140,20 +139,15 @@ class DetailView(TemplateView):
         """
         Check if user have permission to access instances
         """
-        i = api.nova.server_get(request,instance_id)
-        userid = user_acces.get_user(request).id
+        instance = api.nova.server_get(request, instance_id)
+        user_id = user_acces.get_user(request).id
         tenant_id = user_acces.get_user(request).project_id
-        roles = user_acces.get_user(request).roles
-        my_role = []
+        roles = [str(role["name"]) for role in user_acces.get_user(request).roles]
     
-        for r in roles :
-            my_role.append(str(r["name"]))
-
-        if (i.user_id == userid) or (i.tenant_id == tenant_id) and (settings.PROJECT_MANAGER_ROLE in my_role) :
-
-                return True
-        else :
-                return False
+        if (instance.user_id == user_id) or (instance.tenant_id == tenant_id) and (settings.PROJECT_MANAGER_ROLE in roles) :
+            return True
+        
+        return False
 
 
     def get_context_data(self,instance_id, **kwargs):
