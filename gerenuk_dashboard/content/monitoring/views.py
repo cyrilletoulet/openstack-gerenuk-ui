@@ -101,7 +101,7 @@ class IndexView(DataTableView):
         roles = user_acces.get_user(self.request).roles
 
         for r in roles:
-            if r["name"] == name :
+            if r["name"] == name:
                 return True
 
         return False
@@ -143,8 +143,8 @@ class DetailView(TemplateView):
         user_id = user_acces.get_user(request).id
         tenant_id = user_acces.get_user(request).project_id
         roles = [str(role["name"]) for role in user_acces.get_user(request).roles]
-    
-        if (instance.user_id == user_id) or (instance.tenant_id == tenant_id) and (settings.PROJECT_MANAGER_ROLE in roles) :
+
+        if settings.PROJECT_MANAGER_ROLE in roles and ((instance.user_id == user_id) or (instance.tenant_id == tenant_id)):
             return True
         
         return False
@@ -155,22 +155,21 @@ class DetailView(TemplateView):
         Returns the charts
         """
         context = super(DetailView, self).get_context_data(**kwargs)
-        obj = DetailView()
 
         try:
-           if obj.has_permission(self.request, instance_id) :
+           if self.has_permission(self.request, instance_id):
               project_day  = ProjectViewDay()
               project_week = ProjectViewWeek()
               project_hour = ProjectViewHour()
 
-              #Project used for test in detail.html
+              # Project used for test in detail.html
               #context["project"] = test.get_user(self.request, instance_id)
               context["page_title"] = instance_id
               context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
               context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
               context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
 
-           else :
+           else:
               msg = _("Unable to retrieve instance.")
               redirect = reverse(self.redirect_url)
               exceptions.handle(self.request, msg, redirect=redirect)
@@ -183,6 +182,7 @@ class DetailView(TemplateView):
         return context
 
 
+    
 class ProjectViewHour(TemplateView):
     """
     The hourly statistics
