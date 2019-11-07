@@ -130,6 +130,12 @@ class UserAlertsTable(tables.DataTable):
         """
         return datum.id
 
+    def get_object_display(self, datum):
+        """
+        Display id to be deleted
+        """
+        return datum.id
+
 
     class Meta(object):
         """
@@ -256,6 +262,13 @@ class ReadAlertsTable(tables.DataTable):
     def get_object_id(self, datum):
         """
         Get alert id.
+        """
+        return datum.id
+
+
+    def get_object_display(self, datum):
+        """
+        Display id to be deleted
         """
         return datum.id
 
