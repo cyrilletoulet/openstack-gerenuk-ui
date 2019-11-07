@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 10:00:48 CET 2019
+# Thu  7 Nov 08:24:37 CET 2019
 
 import gerenuk
 import collections
@@ -32,6 +32,7 @@ from django.utils.translation import pgettext_lazy
 from django.views.generic import TemplateView
 
 from gerenuk_dashboard.content.monitoring import tables
+from gerenuk_dashboard.content.exceptions import PermissionsError
 from openstack_dashboard import api
 from openstack_auth import utils as user_acces
 
@@ -101,7 +102,7 @@ class IndexView(DataTableView):
         roles = user_acces.get_user(self.request).roles
 
         for r in roles:
-            if r["name"] == name :
+            if r["name"] == name:
                 return True
 
         return False
@@ -128,13 +129,29 @@ class IndexView(DataTableView):
 
 
 class DetailView(TemplateView):
-
     """
     The monitoring view
     """
     template_name = "project/monitoring/detail.html"
     redirect_url = "horizon:project:monitoring:index"
     page_title = _("Monitoring")
+
+    def has_permission(self, request, instance_id):
+        """
+        Check if user have permission to access instances
+        """
+        instance = api.nova.server_get(request, instance_id)
+        user_id = user_acces.get_user(request).id
+        tenant_id = user_acces.get_user(request).project_id
+        roles = [str(role["name"]) for role in user_acces.get_user(request).roles]
+
+        if instance.tenant_id == tenant_id and (
+            instance.user_id == user_id or settings.PROJECT_MANAGER_ROLE in roles
+        ):
+            return True
+        
+        return False
+
 
     def get_context_data(self, instance_id, **kwargs):
         """
@@ -143,24 +160,35 @@ class DetailView(TemplateView):
         context = super(DetailView, self).get_context_data(**kwargs)
 
         try:
-            project_day  = ProjectViewDay()
-            project_week = ProjectViewWeek()
-            project_hour = ProjectViewHour()
+           if self.has_permission(self.request, instance_id):
+              project_day  = ProjectViewDay()
+              project_week = ProjectViewWeek()
+              project_hour = ProjectViewHour()
 
-            context["page_title"] = instance_id
-            context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
-            context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
-            context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
-            
-        except Exception:
-            msg = _("Unable to retrieve instance.")
+              # Project used for test in detail.html
+              #context["project"] = test.get_user(self.request, instance_id)
+              context["page_title"] = instance_id
+              context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
+              context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
+              context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
+
+           else:
+              raise PermissionsError()
+
+        except PermissionsError:
+            msg = _("Insufficient permissions.")
             redirect = reverse(self.redirect_url)
             exceptions.handle(self.request, msg, redirect=redirect)
-        
+            
+        except Exception:
+            msg = _("Unable to retrieve instance monitoring.")
+            redirect = reverse(self.redirect_url)
+            exceptions.handle(self.request, msg, redirect=redirect)
+
         return context
 
 
-
+    
 class ProjectViewHour(TemplateView):
     """
     The hourly statistics
