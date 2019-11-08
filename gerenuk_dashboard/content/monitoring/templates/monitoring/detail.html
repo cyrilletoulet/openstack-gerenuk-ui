@@ -7,6 +7,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block main %}
+  {% if is_project_manager %}
+    <p>{% trans "You're known as project manager."%}</p>
+  {% endif %}
+
   {% include 'project/monitoring/piecharthour.html' %}
   {% include 'project/monitoring/piechartday.html' %}
   {% include 'project/monitoring/piechartweek.html' %}

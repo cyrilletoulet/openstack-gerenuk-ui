@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 08:24:37 CET 2019
+# Fri  8 Nov 08:55:53 CET 2019
 
 import gerenuk
 import collections
@@ -35,6 +35,7 @@ from openstack_dashboard import api
 from openstack_auth import utils as os_auth
 from gerenuk_dashboard.content.monitoring import tables
 from gerenuk_dashboard.content.exceptions import PermissionsError
+from gerenuk_dashboard.content import helpers
 
 # Charts definition
 ChartDefHour = collections.namedtuple(
@@ -95,19 +96,17 @@ class IndexView(DataTableView):
     template_name = "project/monitoring/index.html"
     page_title = _("Monitoring")
 
-    def has_role(self, name):
+
+    def get_context_data(self, **kwargs):
         """
-        Check if the current user has a given role
+        Define the view context
         """
-        roles = os_auth.get_user(self.request).roles
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
+        return context
 
-        for r in roles:
-            if r["name"] == name:
-                return True
-
-        return False
-
-
+    
     def get_data(self):
         """
         Getter used by the InstancesTable model
@@ -116,7 +115,7 @@ class IndexView(DataTableView):
         instances, self._more = api.nova.server_list(self.request)
         
         for instance in instances:
-            if self.has_role(settings.PROJECT_MANAGER_ROLE):
+            if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                 my_instances.append(instance)
 
             elif hasattr(instance, "user_id"):
@@ -136,6 +135,7 @@ class DetailView(TemplateView):
     redirect_url = "horizon:project:monitoring:index"
     page_title = _("Monitoring")
 
+    
     def has_permission(self, request, instance_id):
         """
         Check if user have permission to access instances
@@ -158,20 +158,20 @@ class DetailView(TemplateView):
         Returns the charts
         """
         context = super(DetailView, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
 
         try:
            if self.has_permission(self.request, instance_id):
+              context["page_title"] = instance_id
+              
               project_day  = ProjectViewDay()
               project_week = ProjectViewWeek()
               project_hour = ProjectViewHour()
 
-              # Project used for test in detail.html
-              #context["project"] = test.get_user(self.request, instance_id)
-              context["page_title"] = instance_id
               context["charts_daily"]  = project_day._get_charts_data_daily(instance_id)
               context["charts_weekly"] = project_week._get_charts_data_weekly(instance_id)
               context["charts_hourly"] = project_hour._get_charts_data_hourly(instance_id)
-
            else:
               raise PermissionsError()
 
