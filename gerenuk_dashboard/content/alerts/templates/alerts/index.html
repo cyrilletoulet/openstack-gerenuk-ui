@@ -7,6 +7,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block main %}
+  {% if is_project_manager %}
+    <p>{% trans "You're known as project manager."%}</p>
+  {% endif %}
+
   <h2>User alerts</h2>
   <div>
     {{ user_alerts_table.render }}
