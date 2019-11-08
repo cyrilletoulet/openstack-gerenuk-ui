@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 16:48:57 CET 2019
+# Fri  8 Nov 09:42:06 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -28,6 +28,7 @@ from horizon import exceptions
 from horizon import messages
 
 from gerenuk_dashboard.content.resources import tables
+from gerenuk_dashboard.content import helpers
 from openstack_dashboard import api
 from openstack_auth import utils as os_auth
 
@@ -50,6 +51,16 @@ class IndexView(MultiTableView):
     template_name = "project/resources/index.html"
     page_title = _("Resources")
 
+    
+    def get_context_data(self, **kwargs):
+        """
+        Define the view context
+        """
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
+        return context
+    
 
     def get_instances_data(self):
         """
@@ -85,19 +96,6 @@ class IndexView(MultiTableView):
         return volumes_list
 
 
-    def has_role(self, name):
-        """
-        Check if the current user has a given role
-        """
-        roles = os_auth.get_user(self.request).roles
-
-        for r in roles:
-            if r["name"] == name :
-                return True
-
-        return False
-
-
     def get_snapshots_data(self):
         """
         Getter used by SnapshotsTable model.
@@ -111,7 +109,7 @@ class IndexView(MultiTableView):
             snapshots = api.glance.image_list_detailed(self.request)
             for s in snapshots[0]:
                 if s.properties.get("image_type") == "snapshot":
-                    if (s.properties.get("user_id") == userid) or all(getattr(s, attr) == value for (attr, value) in filters.items()) and self.has_role(settings.PROJECT_MANAGER_ROLE):
+                    if (s.properties.get("user_id") == userid) or all(getattr(s, attr) == value for (attr, value) in filters.items()) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                         snapshots_list.append(s)
                         
             return snapshots_list
