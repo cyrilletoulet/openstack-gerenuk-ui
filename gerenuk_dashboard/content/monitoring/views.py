@@ -159,6 +159,7 @@ class DetailView(TemplateView):
         """
         context = super(DetailView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["back_to_monitoring_url"] = reverse(self.redirect_url)
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
 
         try:
