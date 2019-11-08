@@ -25,6 +25,7 @@ from collections import namedtuple
 
 from openstack_auth import utils as os_auth
 
+from django.urls import reverse
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
@@ -51,6 +52,7 @@ class AlertsTables(MultiTableView):
         """
         context = super(AlertsTables, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["archives_url"] = reverse("horizon:project:alerts:archives")
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         
         return context
@@ -126,7 +128,7 @@ class ReadAlerts(DataTableView):
     """
     table_class = tables.ReadAlertsTable
     template_name = 'project/alerts/read.html'
-    page_title = _("Alerts")
+    page_title = _("Archives")
 
 
     def get_context_data(self, **kwargs):
@@ -135,6 +137,7 @@ class ReadAlerts(DataTableView):
         """
         context = super(ReadAlerts, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["back_to_alerts_url"] = reverse("horizon:project:alerts:index")
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         
         return context

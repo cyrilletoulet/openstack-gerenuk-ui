@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 16:35:41 CET 2019
+# Fri  8 Nov 09:25:21 CET 2019
 
 from django.conf.urls import url
 from gerenuk_dashboard.content.alerts import views
@@ -25,5 +25,5 @@ from gerenuk_dashboard.content.alerts import views
 # Define URL patterns
 urlpatterns = [
     url(r"^$", views.AlertsTables.as_view(), name ="index"),
-    url(r"^read/$", views.ReadAlerts.as_view(), name ="read"),
+    url(r"^archives/$", views.ReadAlerts.as_view(), name ="archives"),
 ]

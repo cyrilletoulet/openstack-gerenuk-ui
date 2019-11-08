@@ -9,6 +9,7 @@
 {% block main %}
   {% if is_project_manager %}
     <p>{% trans "You're known as project manager."%}</p>
+    <p><a href="{{ archives_url }}">{% trans "Go to archives"%}</a></p>
   {% endif %}
 
   <h2>User alerts</h2>
