@@ -7,6 +7,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block main %}
+  {% if is_project_manager %}
+    <p>{% trans "You're known as project manager."%}</p>
+  {% endif %}
+
   <div class="table_wrapper">
     <table width="300" id="alerts" class="table table-striped datatable tablesorter tablesorter-default">
       <thead>
