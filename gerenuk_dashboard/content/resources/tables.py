@@ -109,7 +109,7 @@ def get_snapshot_id(image):
     return _("Not available")
 
 
-def get_type(image):
+def get_image_type(image):
     """
     Get image/snapshot type.
     """
@@ -134,7 +134,7 @@ class InstancesTable(tables.DataTable):
     image_name = tables.Column("image_name", verbose_name=_("Image name"))
     instance_id = tables.Column(get_instance_id, verbose_name=_("Instance monitoring"), link=get_monitoring_detail_link)
 
-    
+
     class Meta(object):
         """
         Define metadata.
@@ -159,7 +159,7 @@ class VolumesTable(tables.DataTable):
     def get_object_display(self, obj):
         return obj.name
 
-    
+
     class Meta:
         """
         Define metadata.
@@ -176,7 +176,7 @@ class SnapshotsTable(tables.DataTable):
     """
     name = tables.WrappingColumn(get_snapshot_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description",verbose_name=_("Description"))
-    snapshot_type = tables.Column(get_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
+    snapshot_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
     snapshot_id= tables.Column(get_snapshot_id,verbose_name=_("Snapshot ID"))
 
 
@@ -186,4 +186,3 @@ class SnapshotsTable(tables.DataTable):
         """
         name = "snapshots"
         verbose_name = _("Snapshots")
-

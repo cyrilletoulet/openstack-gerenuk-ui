@@ -60,6 +60,7 @@ class IndexView(MultiTableView):
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
+
     def get_instances_data(self):
         """
         Getter used by InstancesTable model.
@@ -107,7 +108,9 @@ class IndexView(MultiTableView):
             snapshots = api.glance.image_list_detailed(self.request)
             for s in snapshots[0]:
                 if s.properties.get("image_type") == "snapshot":
-                    if (s.properties.get("user_id") == userid) or all(getattr(s, attr) == value for (attr, value) in filters.items()) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                    if (s.properties.get("user_id") == userid) or all(
+                            getattr(s, attr) == value for (attr, value) in filters.items()
+                    ) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                         snapshots_list.append(s)
 
             return snapshots_list
