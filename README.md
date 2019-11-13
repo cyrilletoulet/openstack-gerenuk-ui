@@ -25,7 +25,7 @@ db_name = gerenuk
 db_user = gerenuk_dashboard
 db_pass = *secret*
 ```
-***Don't forget to allow port 3306 from the dashobard to the cloud controller in firewall!***
+*Don't forget to allow port 3306 from the dashobard to the cloud controller in firewall!*
 
 Configure the gerenuk dashboard in horizon settings (**/etc/openstack-dashboard/local_settings**):
 ```
@@ -45,4 +45,4 @@ And finally restart the HTTP server:
 systemctl restart httpd
 ```
 
-You should now find the new dashboard in ***Project*** / ***Information*** panel.
+You should now find the new dashboard in **Project** / **Information** panel.
