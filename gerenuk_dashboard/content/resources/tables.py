@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:42:50 CET 2019
+# Wed Nov 13 09:33:13 CET 2019
 
 from django.conf import settings
 from django.template import defaultfilters as filters
@@ -77,20 +77,19 @@ def get_instance_id(instance):
     Get instnace id.
     """
     if hasattr(instance, "id"):
-       instance_id = instance.id
-    
-    return instance_id
+       return instance.id
+   
+    return _("Not available")
 
 
-def get_tenant_id(volume):
+def get_volume_project_id(volume):
     """
-    Get tenant id id.
+    Get volume tenant id.
     """
     if hasattr(volume, "id"):
-        tenant_id = volume.id
-        return tenant_id
-    else:
-        return ("not available")
+        return volume.id
+    
+    return _("Not available")
 
 
 def get_volume_size(volume):
@@ -105,11 +104,9 @@ def get_snapshot_id(image):
     Get snapshot id.
     """
     if hasattr(image, "id"):
-        snapshot_id = image.id
-      
-        return snapshot_id
-    else:
-        return ("not available")
+        return image.id
+    
+    return _("Not available")
 
 
 def get_image_type(image):
@@ -117,24 +114,12 @@ def get_image_type(image):
     Get image/snapshot type.
     """
     if image.properties.get("image_type") == "snapshot":
-        return image.properties.get("image_type")
         return "snapshot"
-    else:
-        return "image"
 
 
-def get_image_id(image):
+def get_snapshot_name(image):
     """
-    Get image id.
-    """
-    if hasattr(image, "id"):
-        image_id = image.id
-    return image_id
-
-
-def get_image_name(image):
-    """
-    Get image name.
+    Get snapshot name.
     """
     return getattr(image, "name", None) or image.id
 
@@ -149,7 +134,7 @@ class InstancesTable(tables.DataTable):
     image_name = tables.Column("image_name", verbose_name=_("Image name"))
     instance_id = tables.Column(get_instance_id, verbose_name=_("Instance monitoring"), link=get_monitoring_detail_link)
 
-    
+
     class Meta(object):
         """
         Define metadata.
@@ -168,13 +153,13 @@ class VolumesTable(tables.DataTable):
     description = tables.Column("description", verbose_name=_("Description"))
     size = tables.Column(get_volume_size, verbose_name=_("Size"), attrs={"data-type": "size"})
     status = tables.Column("status", filters=(filters.title,),verbose_name=_("Status"),status=True,status_choices=STATUS_CHOICES)
-    project = tables.Column(get_tenant_id, verbose_name=_("ID"))
+    project = tables.Column(get_volume_project_id, verbose_name=_("ID"))
 
 
     def get_object_display(self, obj):
         return obj.name
 
-    
+
     class Meta:
         """
         Define metadata.
@@ -189,7 +174,7 @@ class SnapshotsTable(tables.DataTable):
     """
     The horizon table used to display snapshots.
     """
-    name = tables.WrappingColumn(get_image_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
+    name = tables.WrappingColumn(get_snapshot_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description",verbose_name=_("Description"))
     snapshot_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
     snapshot_id= tables.Column(get_snapshot_id,verbose_name=_("Snapshot ID"))
@@ -201,23 +186,3 @@ class SnapshotsTable(tables.DataTable):
         """
         name = "snapshots"
         verbose_name = _("Snapshots")
-
-
-
-class ImagesTable(tables.DataTable):
-    """
-    The horizon table used to display images.
-    """
-    name = tables.WrappingColumn(get_image_name, verbose_name=_("Snap Name"),link="horizon:project:images:images:detail")
-    description = tables.Column("description", verbose_name=_("Description"))
-    image_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
-    image_id = tables.Column(get_image_id, verbose_name=_("Image Id"))
-
-
-    class Meta(object):
-        """
-        Define metadata.
-        """
-        name = "images"
-        status_columns = ["status"]
-        verbose_name = _("Images")

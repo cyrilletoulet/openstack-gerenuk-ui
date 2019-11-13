@@ -16,14 +16,17 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 09:25:21 CET 2019
-
-from django.conf.urls import url
-from gerenuk_dashboard.content.alerts import views
+# Thu  7 Nov 10:24:25 CET 2019
 
 
-# Define URL patterns
-urlpatterns = [
-    url(r"^$", views.AlertsTables.as_view(), name ="index"),
-    url(r"^archives/$", views.ReadAlerts.as_view(), name ="archives"),
-]
+class PermissionsError(Exception):
+    """
+    This exception is raised when a permissions error occurs.
+    """
+
+    def __init__(self, message="Permissions error"):
+        """
+        Initialize the exception.
+        """
+        super(PermissionsError, self).__init__(message)
+

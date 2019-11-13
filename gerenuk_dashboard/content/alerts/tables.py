@@ -17,12 +17,12 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:59:01 CET 2019
+# Thu  7 Nov 16:37:04 CET 2019
 
 import gerenuk
 import gerenuk.api
 
-from openstack_auth import utils as user_acces
+from openstack_auth import utils as os_auth
 
 from django.conf import settings
 from django.utils.translation import get_language
@@ -99,7 +99,7 @@ class MarkUserAlertsAsRead(tables.DeleteAction):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(request).project_id
+        project = os_auth.get_user(request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         read_ids = list()
 
@@ -127,6 +127,12 @@ class UserAlertsTable(tables.DataTable):
     def get_object_id(self, datum):
         """
         Get alert id.
+        """
+        return datum.id
+
+    def get_object_display(self, datum):
+        """
+        Display id to be deleted
         """
         return datum.id
 
@@ -179,7 +185,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
         """
         Define if the current user is allowed to mark alerts as read.
         """
-        roles = user_acces.get_user(request).roles
+        roles = os_auth.get_user(request).roles
         
         for r in roles :
             if r["name"] == settings.PROJECT_MANAGER_ROLE:
@@ -196,7 +202,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(request).project_id
+        project = os_auth.get_user(request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         read_ids = list()
         
@@ -237,3 +243,41 @@ class ProjectAlertsTable(tables.DataTable):
         status_columns = ["severity",]
         table_actions = (MarkProjectAlertsAsRead,)
         row_actions = (MarkProjectAlertsAsRead,)
+
+
+        
+class ReadAlertsTable(tables.DataTable):
+    """
+    The horizon table used to display read alerts.
+    """
+    project = tables.Column("project", verbose_name=_("Project"))
+    if get_language() == "fr":
+        message = tables.Column("message_fr", verbose_name=_("Message"))
+    else:
+        message = tables.Column("message_en", verbose_name=_("Message"))
+    id = tables.Column("id", verbose_name=_("Id"))
+    severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
+    created = tables.Column("timestamp" , verbose_name=_("Created "))
+
+
+    def get_object_id(self, datum):
+        """
+        Get alert id.
+        """
+        return datum.id
+
+
+    def get_object_display(self, datum):
+        """
+        Display id to be deleted
+        """
+        return datum.id
+
+
+    class Meta(object):
+        """
+        Define metadata.
+        """
+        name = "read_alerts"
+        verbose_name = _("Read alerts")
+        status_columns = ["severity",]

@@ -17,20 +17,18 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:58:23 CET 2019
+# Fri  8 Nov 08:45:13 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
-
-from openstack_dashboard import api
-from openstack_dashboard import policy
-
-# Used if under Rocky release
-#from openstack_dashboard.api import _nova
-from openstack_dashboard.api import nova
+from django.conf import settings
 
 from openstack_auth import user
-from openstack_auth import utils as user_acces
+from openstack_dashboard import api
+from openstack_dashboard import policy
+from openstack_dashboard.api import nova
+
+from gerenuk_dashboard.content import helpers
 
 from collections import namedtuple
 
@@ -50,6 +48,7 @@ class AvailableResourcesView(TemplateView):
         context = super(AvailableResourcesView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
         context["flavor_data"] = self.get_flavor(self)
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
 
@@ -57,8 +56,6 @@ class AvailableResourcesView(TemplateView):
         """
         Return the available flavors
         """
-        # Used if under Rocky release
-        #nova_client = _nova.novaclient(self.request)
         nova_client = nova.novaclient(self.request)
         hypervisors_list = dict()
         flavor_data = dict()

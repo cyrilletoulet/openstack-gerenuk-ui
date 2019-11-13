@@ -17,19 +17,21 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:59:44 CET 2019
+# Fri  8 Nov 08:06:13 CET 2019
 
 import gerenuk
 import gerenuk.api
 from collections import namedtuple
 
-from openstack_auth import utils as user_acces
+from openstack_auth import utils as os_auth
 
+from django.urls import reverse
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from horizon.tables import MultiTableView
+from horizon.tables import MultiTableView, DataTableView
 from gerenuk_dashboard.content.alerts import tables
+from gerenuk_dashboard.content import helpers
 
 
 class AlertsTables(MultiTableView):
@@ -44,19 +46,18 @@ class AlertsTables(MultiTableView):
     page_title = _("Alerts")
 
 
-    def has_role(self, name):
+    def get_context_data(self, **kwargs):
         """
-        Check if the current user has a given role
+        Define the view context
         """
-        roles = user_acces.get_user(self.request).roles
+        context = super(AlertsTables, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["archives_url"] = reverse("horizon:project:alerts:archives")
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
+        
+        return context
 
-        for r in roles:
-            if r["name"] == name :
-                return True
-
-        return False
-
-
+        
     def get_project_alerts_data(self):
         """
         Getter used by ProjectAlertsTable model.
@@ -65,7 +66,7 @@ class AlertsTables(MultiTableView):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(self.request).project_id
+        project = os_auth.get_user(self.request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
 
         project_alerts = []
@@ -92,12 +93,12 @@ class AlertsTables(MultiTableView):
         gerenuk_config.load(settings.GERENUK_CONF)
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
-        project = user_acces.get_user(self.request).project_id
+        project = os_auth.get_user(self.request).project_id
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         user_alerts = []
 
         for l in range(0, len(unread_alerts)):
-            if (unread_alerts[l]["uuid"] == user_acces.get_user(self.request).id) and not(self.has_role(settings.PROJECT_MANAGER_ROLE)):
+            if (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id) and not(helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
                 un_alerts = []
                 un_alerts.append(unread_alerts[l])
 
@@ -107,7 +108,7 @@ class AlertsTables(MultiTableView):
                     for a in alert_named:
                         user_alerts.append(a)
 
-            elif (self.has_role(settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+            elif (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
                 un_alerts = []
                 un_alerts.append(unread_alerts[l])
                 
@@ -118,3 +119,53 @@ class AlertsTables(MultiTableView):
                         user_alerts.append(a)
 
         return user_alerts
+
+
+    
+class ReadAlerts(DataTableView):
+    """
+    The read alerts view.
+    """
+    table_class = tables.ReadAlertsTable
+    template_name = 'project/alerts/read.html'
+    page_title = _("Archives")
+
+
+    def get_context_data(self, **kwargs):
+        """
+        Define the view context
+        """
+        context = super(ReadAlerts, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["back_to_alerts_url"] = reverse("horizon:project:alerts:index")
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
+        
+        return context
+
+
+    def get_data(self):
+        """
+        Getter used by ReadedAlertsTable model.
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
+
+        project = os_auth.get_user(self.request).project_id
+        read_alerts = gerenuk_api.get_read_alerts(project)
+
+        tagged_alerts = []
+
+        for l in range(0, len(read_alerts)):
+            if (read_alerts[l]["uuid"]) and (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
+                re_alerts = []
+                re_alerts.append(read_alerts[l])
+
+                for alert in re_alerts:
+                    alert_named = [namedtuple("Alert", alert.keys())(*alert.values())]
+
+                    for a in alert_named:
+                        tagged_alerts.append(a)
+            else :
+                tagged_alerts = []
+        return tagged_alerts

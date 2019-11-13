@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 10:00:16 CET 2019
+# Thu  7 Nov 16:44:09 CET 2019
 
 from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -58,6 +58,11 @@ class InstancesTable(tables.DataTable):
     """
     The horizon table used to display instance.
     """
+    name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
+    image_name = tables.Column("image_name", verbose_name=_("Image"))
+    status = tables.Column("status", verbose_name=_("Status"))
+
+
     def get_instid(instance):
         """
         Get instance id.
@@ -66,13 +71,10 @@ class InstancesTable(tables.DataTable):
             instid = instance.id
         return instid
 
-
-    name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
+    
     instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
-    image_name = tables.Column("image_name", verbose_name=_("Image"))
-    status = tables.Column("status", verbose_name=_("Status"))
 
-
+    
     class Meta(object):
         """
         Define metadata.

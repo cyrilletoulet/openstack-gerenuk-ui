@@ -14,16 +14,18 @@
 # along with Gerenuk. If not, see <https://www.gnu.org/licenses/>.
 #
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
-# Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 09:25:21 CET 2019
+# Fri  8 Nov 08:06:13 CET 2019
 
-from django.conf.urls import url
-from gerenuk_dashboard.content.alerts import views
+from openstack_auth import utils as os_auth
 
 
-# Define URL patterns
-urlpatterns = [
-    url(r"^$", views.AlertsTables.as_view(), name ="index"),
-    url(r"^archives/$", views.ReadAlerts.as_view(), name ="archives"),
-]
+def has_role(request, name):
+    """
+    Check if the current user has a given role
+    """
+    for role in os_auth.get_user(request).roles:
+        if role["name"] == name :
+            return True
+
+    return False

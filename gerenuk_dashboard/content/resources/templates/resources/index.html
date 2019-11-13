@@ -7,6 +7,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block main %}
+  {% if is_project_manager %}
+    <p>{% trans "You're known as project manager."%}</p>
+  {% endif %}
+
   <div>
     <h2> {% trans "Instances" %}</h2>
     {{ instances_table.render }}
@@ -22,8 +26,4 @@
     {{ snapshots_table.render }}
   </div>
 
-  <div>
-    <h2>{% trans "Project Images" %}</h2>
-    {{ imgs_table.render }}
-  </div>
 {% endblock %}

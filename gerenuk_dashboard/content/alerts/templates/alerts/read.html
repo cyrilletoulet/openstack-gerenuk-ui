@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load i18n breadcrumb_nav %}
+{% load i18n sizeformat %}
+{% load horizon i18n bootstrap %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block main %}
+  {% if is_project_manager %}
+    <p>{% trans "You're known as project manager."%}</p> 
+    <p><a href="{{ back_to_alerts_url }}">{% trans "Back to alerts"%}</a></p>
+  {% endif %}  
+
+  <h2>Read alerts</h2>
+  <div>
+    {{ read_alerts_table.render }}
+  </div>
+{% endblock %}
