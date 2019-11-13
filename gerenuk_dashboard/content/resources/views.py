@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 09:42:06 CET 2019
+# Wed Nov 13 09:31:50 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -45,13 +45,12 @@ class IndexView(MultiTableView):
     table_classes = (
         tables.InstancesTable,
         tables.VolumesTable,
-        tables.SnapshotsTable,
-        tables.ImagesTable
+        tables.SnapshotsTable
     )
     template_name = "project/resources/index.html"
     page_title = _("Resources")
 
-    
+
     def get_context_data(self, **kwargs):
         """
         Define the view context
@@ -60,7 +59,6 @@ class IndexView(MultiTableView):
         context["page_title"] = self.page_title
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
-    
 
     def get_instances_data(self):
         """
@@ -77,7 +75,7 @@ class IndexView(MultiTableView):
 
         return instances_list
 
-    
+
     def get_volumes_data(self):
         """
         Getter used by VolumesTable model.
@@ -88,8 +86,8 @@ class IndexView(MultiTableView):
         cinder = api.cinder.cinderclient(self.request)
         unfiltred_volumes = cinder.volumes.list()
         volumes_list = list()
-        
-        for v in unfiltred_volumes: 
+
+        for v in unfiltred_volumes:
             if all(getattr(v, attr) == value for (attr, value) in filters.items()):
                 volumes_list.append(v)
 
@@ -104,34 +102,16 @@ class IndexView(MultiTableView):
         owner = os_auth.get_user(self.request).project_id
         filters = {"owner" : owner}
         snapshots_list = list()
-                
+
         try:
             snapshots = api.glance.image_list_detailed(self.request)
             for s in snapshots[0]:
                 if s.properties.get("image_type") == "snapshot":
                     if (s.properties.get("user_id") == userid) or all(getattr(s, attr) == value for (attr, value) in filters.items()) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                         snapshots_list.append(s)
-                        
+
             return snapshots_list
-               
+
         except Exception:
             snapshots_list = []
             exceptions.handle(self.request,_("Unable to retrieve snapshots"))
-
-
-    def get_images_data(self):
-        """
-        Getter used by ImagesTable model.
-        """
-        filters = {"visibility": u"public"}
-        images_list = list()
-
-        try:
-            images = api.glance.image_list_detailed(self.request)
-            for i in images[0]:
-                if all(getattr(i, attr) == value for (attr, value) in filters.items()):
-                    images_list.append(i)
-            return images_list
-
-        except Exception:
-            exceptions.handle(self.request,_("Unable to retrieve images"))
