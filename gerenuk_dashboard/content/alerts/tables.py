@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 16:37:04 CET 2019
+# Mon 18 Nov 13:23:55 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -121,7 +121,7 @@ class UserAlertsTable(tables.DataTable):
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
 
     def get_object_id(self, datum):
@@ -224,7 +224,7 @@ class ProjectAlertsTable(tables.DataTable):
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
     
     def get_object_id(self, datum):
@@ -257,7 +257,7 @@ class ReadAlertsTable(tables.DataTable):
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id"))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
 
     def get_object_id(self, datum):
