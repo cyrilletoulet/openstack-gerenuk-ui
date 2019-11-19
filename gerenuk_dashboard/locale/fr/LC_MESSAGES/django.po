@@ -1,0 +1,305 @@
+# This file is part of Gerenuk.
+#
+# Gerenuk is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# Gerenuk is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Gerenuk. If not, see <https://www.gnu.org/licenses/>.
+#
+# Iheb ELADIB <iheb.eladib@univ-lille.fr>
+# Cyrille TOULET <cyrille.toulet@univ-lille.fr>
+#
+# Tue 19 Nov 17:10:43 CET 2019
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-18 12:56+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-11-19 15:51+0000\n"
+"Last-Translator: iheb eladib <cyrille.toulet@univ-lille.fr>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: content/alerts/panel.py:29 content/alerts/views.py:46
+msgid "Alerts"
+msgstr "Alertes"
+
+#: content/alerts/tables.py:67 content/alerts/tables.py:157
+msgid "Please do the required actions before marking this alert."
+msgstr "Veuillez compléter les actions requises avant de marquer cette alerte."
+
+#: content/alerts/tables.py:76 content/alerts/tables.py:166
+msgid "Mark alert as read"
+msgid_plural "Mark them as read"
+msgstr[0] "Marquer comme lu"
+msgstr[1] "Marquer comme lu"
+
+#: content/alerts/tables.py:84 content/alerts/tables.py:174
+msgid "Scheduled deletion of alert"
+msgid_plural "Scheduled deletion of alerts"
+msgstr[0] "Suppression de l'alerte planifiée"
+msgstr[1] "Suppression des alertes planifiée"
+
+#: content/alerts/tables.py:117
+msgid "User's ID"
+msgstr "ID de l'utilisateur"
+
+#: content/alerts/tables.py:119 content/alerts/tables.py:121
+#: content/alerts/tables.py:222 content/alerts/tables.py:224
+#: content/alerts/tables.py:255 content/alerts/tables.py:257
+msgid "Message"
+msgstr "Message"
+
+#: content/alerts/tables.py:122 content/alerts/tables.py:225
+msgid "Id "
+msgstr "ID"
+
+#: content/alerts/tables.py:123 content/alerts/tables.py:226
+#: content/alerts/tables.py:259
+msgid "Severity"
+msgstr "Sévérité"
+
+#: content/alerts/tables.py:124 content/alerts/tables.py:227
+#: content/alerts/tables.py:260
+msgid "Updated "
+msgstr "Modifiée "
+
+#: content/alerts/tables.py:145
+msgid "User alerts"
+msgstr "Alertes utilisateurs"
+
+#: content/alerts/tables.py:220 content/alerts/tables.py:253
+msgid "Project"
+msgstr "Projet"
+
+#: content/alerts/tables.py:242
+msgid "Project alerts"
+msgstr "Alertes du projet"
+
+#: content/alerts/tables.py:258
+msgid "Id"
+msgstr "ID"
+
+#: content/alerts/tables.py:282
+msgid "Read alerts"
+msgstr "Alertes lues"
+
+#: content/alerts/templates/alerts/index.html:11
+#: content/alerts/templates/alerts/read.html:11
+#: content/available/templates/available/index.html:11
+#: content/monitoring/templates/monitoring/detail.html:11
+#: content/monitoring/templates/monitoring/index.html:8
+#: content/resources/templates/resources/index.html:11
+msgid "You're known as project manager."
+msgstr "Vous êtes connu en tant que chef de projet."
+
+#: content/alerts/templates/alerts/index.html:12
+msgid "Go to archives"
+msgstr "Aller aux archives"
+
+#: content/alerts/templates/alerts/read.html:12
+msgid "Back to alerts"
+msgstr "Revenir aux alertes"
+
+#: content/alerts/views.py:131
+msgid "Archives"
+msgstr "Archives"
+
+#: content/available/panel.py:29 content/available/views.py:41
+msgid "Available resources"
+msgstr "Ressources disponibles"
+
+#: content/available/tables.py:30
+msgid "Flavor id"
+msgstr "ID du gabarit"
+
+#: content/available/tables.py:31
+#: content/available/templates/available/index.html:23
+msgid "Flavor name"
+msgstr "Nom du gabarit"
+
+#: content/available/tables.py:32
+msgid "Available instances"
+msgstr "Instances disponibles"
+
+#: content/available/tables.py:40
+msgid "Flavors"
+msgstr "Gabarits"
+
+#: content/available/templates/available/index.html:19
+msgid "Available"
+msgstr "Disponible"
+
+#: content/monitoring/panel.py:29 content/monitoring/views.py:97
+#: content/monitoring/views.py:136
+msgid "Monitoring"
+msgstr "Supervision"
+
+#: content/monitoring/tables.py:61 content/resources/tables.py:132
+#: content/resources/tables.py:152
+msgid "Name"
+msgstr "Nom"
+
+#: content/monitoring/tables.py:62
+msgid "Image"
+msgstr "Image"
+
+#: content/monitoring/tables.py:63 content/resources/tables.py:133
+#: content/resources/tables.py:155
+msgid "Status"
+msgstr "État"
+
+#: content/monitoring/tables.py:75
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: content/monitoring/tables.py:83
+#: content/monitoring/templates/monitoring/index.html:11
+#: content/resources/tables.py:143
+#: content/resources/templates/resources/index.html:15
+msgid "Instances"
+msgstr "Instances"
+
+#: content/monitoring/templates/monitoring/piechartday.html:12
+msgid "Daily"
+msgstr "Quotidienne"
+
+#: content/monitoring/templates/monitoring/piechartday.html:19
+#: content/monitoring/templates/monitoring/piecharthour.html:19
+#: content/monitoring/templates/monitoring/piechartweek.html:19
+msgid "used is"
+msgstr "utilisé est"
+
+#: content/monitoring/templates/monitoring/piecharthour.html:12
+msgid "Hourly"
+msgstr "Horaire"
+
+#: content/monitoring/templates/monitoring/piechartweek.html:12
+msgid "Weekly"
+msgstr "Hebdomadaire"
+
+#: content/monitoring/views.py:48
+msgid "Monitoring Hourly"
+msgstr "Supérvision horaire"
+
+#: content/monitoring/views.py:50 content/monitoring/views.py:66
+#: content/monitoring/views.py:82
+msgid "Memory"
+msgstr "Mémoire"
+
+#: content/monitoring/views.py:51 content/monitoring/views.py:67
+#: content/monitoring/views.py:83
+msgid "vCPU"
+msgstr "vCPU"
+
+#: content/monitoring/views.py:52 content/monitoring/views.py:68
+#: content/monitoring/views.py:84
+msgid "CPU"
+msgstr "CPU"
+
+#: content/monitoring/views.py:64
+msgid "Monitoring Weekly"
+msgstr "Supervision hebdomadaire"
+
+#: content/monitoring/views.py:80
+msgid "Monitoring Daily"
+msgstr "Supervision quotidienne"
+
+#: content/monitoring/views.py:180
+msgid "Insufficient permissions."
+msgstr "Permissions insuffisantes"
+
+#: content/monitoring/views.py:185
+msgid "Unable to retrieve instance monitoring."
+msgstr "Impossible de récupérer la supervision de l'instance"
+
+#: content/monitoring/views.py:250 content/monitoring/views.py:327
+#: content/monitoring/views.py:405
+msgctxt "Label in the limit summary"
+msgid "Used"
+msgstr "Utilisé"
+
+#: content/resources/panel.py:29 content/resources/views.py:51
+msgid "Resources"
+msgstr "Ressources"
+
+#: content/resources/tables.py:43
+msgctxt "Type of an image"
+msgid "Snapshot"
+msgstr "Instantané"
+
+#: content/resources/tables.py:44
+msgctxt "Type of an image"
+msgid "Image"
+msgstr "Image"
+
+#: content/resources/tables.py:82 content/resources/tables.py:92
+#: content/resources/tables.py:109
+msgid "Not available"
+msgstr "Non disponible"
+
+#: content/resources/tables.py:99
+#, python-format
+msgid "%sGB"
+msgstr "%s Go"
+
+#: content/resources/tables.py:134
+msgid "Image name"
+msgstr "Nom de l'image"
+
+#: content/resources/tables.py:135
+msgid "Instance monitoring"
+msgstr "Supervision de l'instance"
+
+#: content/resources/tables.py:153 content/resources/tables.py:178
+msgid "Description"
+msgstr "Description"
+
+#: content/resources/tables.py:154
+msgid "Size"
+msgstr "Taille"
+
+#: content/resources/tables.py:156
+msgid "ID"
+msgstr "ID"
+
+#: content/resources/tables.py:168
+#: content/resources/templates/resources/index.html:20
+msgid "Volumes"
+msgstr "Volumes"
+
+#: content/resources/tables.py:177
+msgid "Snapshot Name"
+msgstr "Nom de l'instantané"
+
+#: content/resources/tables.py:179
+msgid "Type"
+msgstr "Type"
+
+#: content/resources/tables.py:180
+msgid "Snapshot ID"
+msgstr "ID de l'instantané"
+
+#: content/resources/tables.py:188
+#: content/resources/templates/resources/index.html:25
+msgid "Snapshots"
+msgstr "Instantanés"
+
+#: content/resources/views.py:118
+msgid "Unable to retrieve snapshots"
+msgstr "Impossible de récupérer les instantanés"
+
+#: enabled/_1810_project_informations_panel.py:31
+msgid "Information"
+msgstr "Informations"
