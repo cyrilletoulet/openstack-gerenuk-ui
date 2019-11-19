@@ -14,6 +14,6 @@ cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/opens
 Generate .mo files 
 ```bash
 cd /usr/lib/python2.7/site-packages/gerenuk_dashboard/
-django-admin sudo django-admin compilemessages 
+django-admin compilemessages 
 ```
 
