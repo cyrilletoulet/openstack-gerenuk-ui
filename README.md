@@ -11,9 +11,10 @@ cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/opens
 ```
 
 ## Trasnlation
-Generate .mo files 
+The first step is to create a PO file for the new language and then compile it ( during each modification to this file, it is necessary to recompile it )
 ```bash
 cd /usr/lib/python2.7/site-packages/gerenuk_dashboard/
-django-admin compilemessages 
+django-admin makemessages -l fr 
+django-admin compilemessages
 ```
 
