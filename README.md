@@ -17,4 +17,5 @@ cd /usr/lib/python2.7/site-packages/gerenuk_dashboard/
 django-admin makemessages -l fr 
 django-admin compilemessages
 ```
-
+After generating the django.po file, it needs to be renamed to " django.pot " so it can be uploaded to Zanata.
+Zanata platform : https://translate.zanata.org/
