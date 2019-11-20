@@ -94,12 +94,14 @@ class AlertsTables(MultiTableView):
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
         project = os_auth.get_user(self.request).project_id
+        username = os_auth.get_user(self.request).username
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         user_alerts = []
 
         for l in range(0, len(unread_alerts)):
             if (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id) and not(helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
                 un_alerts = []
+                unread_alerts[l].update({'username':username})
                 un_alerts.append(unread_alerts[l])
 
                 for alert in un_alerts:
@@ -110,6 +112,7 @@ class AlertsTables(MultiTableView):
 
             elif (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
                 un_alerts = []
+                unread_alerts[l].update({'username':username})
                 un_alerts.append(unread_alerts[l])
                 
                 for alert in un_alerts:
