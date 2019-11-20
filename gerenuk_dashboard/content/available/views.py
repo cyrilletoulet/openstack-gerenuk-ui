@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 08:45:13 CET 2019
+# Wed 20 Nov 08:14:40 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -38,7 +38,7 @@ class AvailableResourcesView(TemplateView):
     The available resources view.
     """
     template_name = "project/available/index.html"
-    page_title = _("Avaialble resources")
+    page_title = _("Available resources")
 
 
     def get_context_data(self, **kwargs):

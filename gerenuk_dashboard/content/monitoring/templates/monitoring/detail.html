@@ -10,7 +10,7 @@
   {% if is_project_manager %}
     <p>{% trans "You're known as project manager."%}</p>
   {% endif %}
-  <p><a href="{{ back_to_monitoring_url }}">Back to monitoring</a></p>
+  <p><a href="{{ back_to_monitoring_url }}">{% trans "Back to monitoring" %}</a></p>
 
   {% include 'project/monitoring/piecharthour.html' %}
   {% include 'project/monitoring/piechartday.html' %}

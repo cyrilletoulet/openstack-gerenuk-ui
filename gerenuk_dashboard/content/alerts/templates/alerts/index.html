@@ -9,17 +9,17 @@
 {% block main %}
   {% if is_project_manager %}
     <p>{% trans "You're known as project manager."%}</p>
-    <p><a href="{{ archives_url }}">{% trans "Go to archives"%}</a></p>
+    <p><a href="{{ archives_url }}">{% trans "Go to archives" %}</a></p>
   {% endif %}
 
-  <h2>User alerts</h2>
+  <h2>{% trans "User alerts" %}</h2>
   <div>
     {{ user_alerts_table.render }}
   </div>
 
   <hr/>
 
-  <h2>Projet alerts</h2>
+  <h2>{% trans "Project alerts" %}</h2>
   <div>
       {{ project_alerts_table.render }}
   </div>
