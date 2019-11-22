@@ -97,11 +97,21 @@ class AlertsTables(MultiTableView):
         username = os_auth.get_user(self.request).username
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         user_alerts = []
+        users_cache = dict()
+
 
         for l in range(0, len(unread_alerts)):
-            if (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id) and not(helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
+              if (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+
                 un_alerts = []
-                unread_alerts[l].update({'username':username})
+                user_id = str(unread_alerts[l]["uuid"])
+                if not user_id in users_cache:
+                    user = api.keystone.user_get(self.request, user_id, admin=False)
+                    users_cache[user_id] = user.name
+                    if user.description:
+                       users_cache[user_id] += " ("+user.description+")"
+
+                unread_alerts[l].update({'username':users_cache[user_id]})
                 un_alerts.append(unread_alerts[l])
 
                 for alert in un_alerts:
@@ -110,8 +120,10 @@ class AlertsTables(MultiTableView):
                     for a in alert_named:
                         user_alerts.append(a)
 
-            elif (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+              elif (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id):
+
                 un_alerts = []
+                username = os_auth.get_user(self.request).username
                 unread_alerts[l].update({'username':username})
                 un_alerts.append(unread_alerts[l])
                 
