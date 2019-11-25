@@ -17,13 +17,15 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 08:06:13 CET 2019
+# Mon 25 Nov 09:25:47 CET 2019
 
 import gerenuk
 import gerenuk.api
+
 from collections import namedtuple
 
 from openstack_auth import utils as os_auth
+from openstack_dashboard import api
 
 from django.urls import reverse
 from django.conf import settings
@@ -94,12 +96,24 @@ class AlertsTables(MultiTableView):
         gerenuk_api = gerenuk.api.AlertsAPI(gerenuk_config)
 
         project = os_auth.get_user(self.request).project_id
+        username = os_auth.get_user(self.request).username
         unread_alerts = gerenuk_api.get_unread_alerts(project)
         user_alerts = []
+        users_cache = dict()
+
 
         for l in range(0, len(unread_alerts)):
-            if (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id) and not(helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
+              if (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+
                 un_alerts = []
+                user_id = str(unread_alerts[l]["uuid"])
+                if not user_id in users_cache:
+                    user = api.keystone.user_get(self.request, user_id, admin=False)
+                    users_cache[user_id] = user.name
+                    if user.description:
+                       users_cache[user_id] += " (" + user.description + ")"
+
+                unread_alerts[l].update({'username': users_cache[user_id]})
                 un_alerts.append(unread_alerts[l])
 
                 for alert in un_alerts:
@@ -108,8 +122,11 @@ class AlertsTables(MultiTableView):
                     for a in alert_named:
                         user_alerts.append(a)
 
-            elif (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
+              elif (unread_alerts[l]["uuid"] == os_auth.get_user(self.request).id):
+
                 un_alerts = []
+                username = os_auth.get_user(self.request).username
+                unread_alerts[l].update({'username': username})
                 un_alerts.append(unread_alerts[l])
                 
                 for alert in un_alerts:

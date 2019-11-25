@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 16:37:04 CET 2019
+# Mon 25 Nov 09:22:28 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -64,7 +64,7 @@ class MarkUserAlertsAsRead(tables.DeleteAction):
     The horizon table used to delete user alerts.
     """
     name = "read" 
-    help_text = _("Please do the required actions before marking this alert.")
+    help_text = _("Don't forget to solve the problem before marking an alert as read.")
     default_message_level = "info"
 
 
@@ -114,14 +114,15 @@ class UserAlertsTable(tables.DataTable):
     """
     The horizon table used to display user alerts.
     """
-    uuid = tables.Column("uuid", verbose_name=_("User's ID"))
+    name = tables.Column("username", verbose_name=_("Username"))
+
     if get_language() == "fr":
         message = tables.Column("message_fr", verbose_name=_("Message"))
     else:
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
 
     def get_object_id(self, datum):
@@ -154,7 +155,7 @@ class MarkProjectAlertsAsRead(tables.DeleteAction):
     The horizon table used to mark project alerts as read.
     """
     name = "read" 
-    help_text = _("Please do the required actions before marking this alert.")
+    help_text = _("Don't forget to solve the problem before marking an alert as read.")
     default_message_level = "info"
 
     
@@ -224,7 +225,7 @@ class ProjectAlertsTable(tables.DataTable):
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
     
     def get_object_id(self, datum):
@@ -257,7 +258,7 @@ class ReadAlertsTable(tables.DataTable):
         message = tables.Column("message_en", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id"))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
-    created = tables.Column("timestamp" , verbose_name=_("Created "))
+    created = tables.Column("timestamp" , verbose_name=_("Updated"))
 
 
     def get_object_id(self, datum):
