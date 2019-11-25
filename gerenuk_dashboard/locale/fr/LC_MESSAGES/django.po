@@ -16,7 +16,7 @@
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 #
-# Wed 20 Nov 08:04:16 CET 2019
+# Mon 25 Nov 11:19:11 CET 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -52,8 +52,8 @@ msgstr[0] "Suppression de l'alerte planifiée"
 msgstr[1] "Suppression des alertes planifiée"
 
 #: content/alerts/tables.py:117
-msgid "User's ID"
-msgstr "ID de l'utilisateur"
+msgid "User"
+msgstr "Utilisateur"
 
 #: content/alerts/tables.py:119 content/alerts/tables.py:121
 #: content/alerts/tables.py:222 content/alerts/tables.py:224

@@ -113,7 +113,7 @@ class AlertsTables(MultiTableView):
                     if user.description:
                        users_cache[user_id] += " (" + user.description + ")"
 
-                unread_alerts[l].update({'username': users_cache[user_id]})
+                unread_alerts[l].update({'user': users_cache[user_id]})
                 un_alerts.append(unread_alerts[l])
 
                 for alert in un_alerts:
@@ -126,7 +126,7 @@ class AlertsTables(MultiTableView):
 
                 un_alerts = []
                 username = os_auth.get_user(self.request).username
-                unread_alerts[l].update({'username': username})
+                unread_alerts[l].update({'user': username})
                 un_alerts.append(unread_alerts[l])
                 
                 for alert in un_alerts:
