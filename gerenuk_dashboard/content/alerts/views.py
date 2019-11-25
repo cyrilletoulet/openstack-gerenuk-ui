@@ -21,9 +21,11 @@
 
 import gerenuk
 import gerenuk.api
+
 from collections import namedtuple
 
 from openstack_auth import utils as os_auth
+from openstack_dashboard import api
 
 from django.urls import reverse
 from django.conf import settings
