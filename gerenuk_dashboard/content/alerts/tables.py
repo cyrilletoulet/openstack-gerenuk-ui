@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed 20 Nov 08:26:57 CET 2019
+# Mon 25 Nov 09:22:28 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -114,7 +114,7 @@ class UserAlertsTable(tables.DataTable):
     """
     The horizon table used to display user alerts.
     """
-    name = tables.Column("username", verbose_name=_("Username "))
+    name = tables.Column("username", verbose_name=_("Username"))
 
     if get_language() == "fr":
         message = tables.Column("message_fr", verbose_name=_("Message"))
