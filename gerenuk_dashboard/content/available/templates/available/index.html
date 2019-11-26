@@ -16,20 +16,20 @@
       <thead>
 	<tr class="table_column_header tablesorter-headerRow"> 
 	  <th class="sortable normal_column tablesorter-header" data-column="0" tabindex="0">
-	    <div class="tablesorter-header-inner">{% trans "Available" %}</div>
+            <div class="tablesorter-header-inner">{% trans "Flavor name" %}</div>
 	  </th>
   
           <th class="sortable normal_column tablesorter-header" data-column="1" tabindex="0">
-            <div class="tablesorter-header-inner">{% trans "Flavor name" %}</div>
+	    <div class="tablesorter-header-inner">{% trans "Available" %}</div>
           </th>
 	</tr>
       </thead>
       
       <tbody>
-        {% for k,v in flavor_data.items %}
+        {% for flavor,available in flavors_availability.items %}
 	<tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}"> 
- 	  <td class="sortable normal_column">{{ k }}</td>
-          <td class="sortable normal_column">{{ v }}</td>
+ 	  <td class="sortable normal_column">{{ flavor }}</td>
+          <td class="sortable normal_column">{{ available }}</td>
 	</tr>
 	{% endfor %}
       </tbody>

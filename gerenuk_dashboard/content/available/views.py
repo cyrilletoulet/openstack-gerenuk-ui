@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed 20 Nov 08:14:40 CET 2019
+# Tue 26 Nov 14:44:29 CET 2019
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -43,22 +43,22 @@ class AvailableResourcesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         """
-        Return the flavor_data context
+        Return the view context
         """
         context = super(AvailableResourcesView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
-        context["flavor_data"] = self.get_flavor(self)
+        context["flavors_availability"] = self.get_flavors_availability(self)
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
 
-    def get_flavor(self, request):
+    def get_flavors_availability(self, request):
         """
         Return the available flavors
         """
         nova_client = nova.novaclient(self.request)
         hypervisors_list = dict()
-        flavor_data = dict()
+        flavors_availability = dict()
 
         for hypervisor in nova_client.hypervisors.list(): 
             hypervisors_list[hypervisor.service["host"]] = hypervisor
@@ -67,11 +67,9 @@ class AvailableResourcesView(TemplateView):
         for flavor in nova_client.flavors.list():
                 flavor_meta = flavor.get_keys()
                 
-                if len(flavor_meta.keys()) == 1:
-                    flavor_key = flavor_meta.keys()[0]
-
+                if len(flavor_meta.keys()) >= 1:
                     for aggregate in aggregates:
-                        if aggregate.name == flavor_key:
+                        if aggregate.name in flavor_meta.keys():
                             possible = 0
                             for aggregate_host in aggregate.hosts:
                                 if flavor.vcpus > (hypervisors_list[aggregate_host].vcpus - hypervisors_list[aggregate_host].vcpus_used):
@@ -86,10 +84,6 @@ class AvailableResourcesView(TemplateView):
                                 tmp = min(tmp, hypervisors_list[aggregate_host].free_disk_gb / flavor.disk)
                                 possible += tmp
 
-                            available = []
-                            available.append(possible)
-
-                            for i in available:
-                                flavor_data[i] = flavor.name
+                            flavors_availability[flavor.name] = possible
                                 
-        return flavor_data
+        return flavors_availability
