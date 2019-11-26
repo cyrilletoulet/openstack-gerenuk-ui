@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri  8 Nov 08:55:53 CET 2019
+# Tue 26 Nov 15:43:03 CET 2019
 
 import gerenuk
 import collections
@@ -246,7 +246,7 @@ class ProjectViewHour(TemplateView):
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids_here][key]["hourly"])
-            quota = (100 - used)
+            quota = 100
             text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = None
@@ -323,7 +323,7 @@ class ProjectViewDay(TemplateView):
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids][key]["daily"])
-            quota = (100 - used)
+            quota = 100
             text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = "daily"
@@ -401,7 +401,7 @@ class ProjectViewWeek(TemplateView):
             key = t.quota_key
             info = self.get_data(instance_id)
             used = float(info[uuids][key]["weekly"])            
-            quota = (100 - used)
+            quota = 100
             text = pgettext_lazy("Label in the limit summary", "Used")
             filters = None
             used_display = "weekly"
