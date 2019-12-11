@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 25 Nov 09:25:47 CET 2019
+# Tue 10 Dec 15:04:51 CET 2019
 
 import gerenuk
 import gerenuk.api
@@ -110,7 +110,7 @@ class AlertsTables(MultiTableView):
                 if not user_id in users_cache:
                     user = api.keystone.user_get(self.request, user_id, admin=False)
                     users_cache[user_id] = user.name
-                    if user.description:
+                    if hasattr(user, 'description'):
                        users_cache[user_id] += " (" + user.description + ")"
 
                 unread_alerts[l].update({'user': users_cache[user_id]})
