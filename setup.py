@@ -19,7 +19,7 @@ setup(
     author = "Iheb ELADIB",
     author_email = "iheb.eladib@univ-lille.fr",
 
-    package_data = {"": ["README", "*.html", "*.po"],
+    package_data = {"": ["README", "*.html", "*.po", "*.mo"],
                     "gerenukd_dashboard.enabled": ["*"]},
     include_package_data=True,
     packages = find_packages(include=["gerenuk_dashboard", "gerenuk_dashboard.*"]),

@@ -1,1 +1,1 @@
-recursive-include gerenuk_dashboard *.html *.po
+recursive-include gerenuk_dashboard *.html *.po *.mo *.py
