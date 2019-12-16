@@ -5,7 +5,7 @@ This UI is a dashboard extension for Horizon project.
 
 ## Manual installation
 
-First of all, you need to install [gerenuk](https://gitlab-dsi.univ-lille.fr/hpc/gerenuk) API:
+First of all, you need to install [gerenuk](https://github.com/cyrilletoulet/gerenuk) API:
 ```bash
 yum-config-manager --enable epel
 yum -y install python-pip mysql-connector-python
