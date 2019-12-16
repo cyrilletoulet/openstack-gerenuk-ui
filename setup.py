@@ -1,0 +1,29 @@
+from setuptools import find_packages, setup
+
+
+setup(
+    name = "gerenuk_dashboard",
+    version = "0.1",
+    description = "openstack projet",
+    url = "https://gitlab-dsi.univ-lille.fr/hpc/openstack-gerenuk-ui",
+
+    license = 'GPL',
+    classifiers = [
+        "License :: OSI Approved :: GPL v3 license",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+    ],
+
+    keywords = "monitoring cloud openstack",
+
+    author = "Iheb ELADIB",
+    author_email = "iheb.eladib@univ-lille.fr",
+
+    package_data = {'': ["README","*.html",'*.po'],
+                    'gerenukd_dashboard.enabled': ['*']},
+    include_package_data=True,
+    packages = find_packages(include=['gerenuk_dashboard', 'gerenuk_dashboard.*']),
+
+    python_requires = '>=2.7,!=3.*',
+)

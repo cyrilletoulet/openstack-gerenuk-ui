@@ -1,0 +1,1 @@
+recursive-include gerenuk_dashboard *.html *.po
