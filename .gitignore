@@ -4,3 +4,4 @@
 *.tgz
 *.tar
 *.gz
+*.egg-info
