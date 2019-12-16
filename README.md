@@ -2,15 +2,24 @@
 
 This UI is a dashboard extension for Horizon project.
 
+## Build distribution tarball
 
-## Manual installation
+To build a distribution tarball:
+```bash
+python setup.py sdist
+```
+
+The distribution will be located in **dist/** directory.
+
+
+## Installation
 
 First of all, you need to install [gerenuk](https://github.com/cyrilletoulet/gerenuk) API:
 ```bash
 yum-config-manager --enable epel
 yum -y install python-pip mysql-connector-python
 yum-config-manager --disable epel
-pip install gerenuk-1.2.4.tar.gz
+pip install gerenuk-1.3.0.tar.gz
 mkdir /etc/gerenuk
 chmod 711 /etc/gerenuk
 touch /etc/gerenuk/gerenuk.conf
@@ -36,7 +45,7 @@ PROJECT_MANAGER_ROLE = "project_manager"
 
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-cp -r gerenuk_dashboard /usr/lib/python2.7/site-packages/
+pip install gerenuk_dashboard-0.6.tar.gz
 cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 
