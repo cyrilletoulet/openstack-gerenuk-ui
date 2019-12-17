@@ -113,9 +113,18 @@ class IndexView(DataTableView):
         """
         my_instances = []
         instances, self._more = api.nova.server_list(self.request)
+        users_cache = dict()
         
         for instance in instances:
             if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                user_id = instance.user_id
+                if not user_id in users_cache:
+                    user = api.keystone.user_get(self.request, user_id, admin=False)
+                    users_cache[user_id] = user.name
+                    if hasattr(user, 'description'):
+                       users_cache[user_id] += " (" + user.description + ")"
+
+                instance.user = users_cache[user_id]
                 my_instances.append(instance)
 
             elif hasattr(instance, "user_id"):

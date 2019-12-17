@@ -58,6 +58,7 @@ class InstancesTable(tables.DataTable):
     """
     The horizon table used to display instance.
     """
+    user = tables.Column("user", verbose_name=_("Username"))
     name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
     image_name = tables.Column("image_name", verbose_name=_("Image"))
     status = tables.Column("status", verbose_name=_("Status"))
