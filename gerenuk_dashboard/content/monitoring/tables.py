@@ -72,7 +72,9 @@ class InstancesTable(tables.DataTable):
             instid = instance.id
         return instid
 
-    
+
+    memory = tables.Column("memory", verbose_name=_("Memory"))
+    vcpu = tables.Column("vcpu", verbose_name=_("vCPU")) 
     instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
 
     

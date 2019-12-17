@@ -106,7 +106,22 @@ class IndexView(DataTableView):
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
-    
+    def get_statistics(self, instance_id, **kwargs):
+        """
+        Returns statistics from Gerenuk
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
+
+        uuid = list()
+        uuid.append(str(instance_id))
+        results = gerenuk_api.get_instances_monitoring(uuid)
+
+        return results
+   
+
+ 
     def get_data(self):
         """
         Getter used by the InstancesTable model
@@ -124,7 +139,15 @@ class IndexView(DataTableView):
                     if hasattr(user, 'description'):
                        users_cache[user_id] += " (" + user.description + ")"
 
+
+                info = self.get_statistics(instance.id)
+                mem =float(info[instance.id]["mem"]["daily"])
+                vcpu = float(info[instance.id]["vcpu"]["daily"])
+
                 instance.user = users_cache[user_id]
+                instance.memory = mem
+                instance.vcpu = vcpu
+
                 my_instances.append(instance)
 
             elif hasattr(instance, "user_id"):
