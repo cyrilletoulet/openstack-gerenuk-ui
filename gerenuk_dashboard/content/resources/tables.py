@@ -116,6 +116,13 @@ def get_image_type(image):
     if image.properties.get("image_type") == "snapshot":
         return "snapshot"
 
+def get_snapshot_owner(image):
+    """
+    Get snapshot owner
+    """
+    return image.properties.get("owner_user_name").upper()
+
+
 
 def get_snapshot_name(image):
     """
@@ -174,6 +181,7 @@ class SnapshotsTable(tables.DataTable):
     """
     The horizon table used to display snapshots.
     """
+    owner = tables.Column(get_snapshot_owner,verbose_name=_("Owner"))
     name = tables.WrappingColumn(get_snapshot_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description",verbose_name=_("Description"))
     snapshot_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)
