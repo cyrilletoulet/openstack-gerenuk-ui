@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed Nov 13 09:31:50 CET 2019
+# Tue 17 Dec 16:12:06 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -57,6 +57,8 @@ class IndexView(MultiTableView):
         """
         context = super(IndexView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["instances_url"] = reverse("horizon:project:instances:index")
+        context["volumes_url"] = reverse("horizon:project:volumes:index")
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
