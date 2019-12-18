@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed Nov 13 09:33:13 CET 2019
+# Wed 18 Dec 14:10:42 CET 2019
 
 from django.conf import settings
 from django.template import defaultfilters as filters
@@ -174,6 +174,7 @@ class SnapshotsTable(tables.DataTable):
     """
     The horizon table used to display snapshots.
     """
+    owner = tables.Column("user", verbose_name=_("User"))
     name = tables.WrappingColumn(get_snapshot_name, verbose_name=_("Snapshot Name"),link="horizon:project:images:images:detail")
     description = tables.Column("description",verbose_name=_("Description"))
     snapshot_type = tables.Column(get_image_type, verbose_name=_("Type"), display_choices=TYPE_CHOICES)

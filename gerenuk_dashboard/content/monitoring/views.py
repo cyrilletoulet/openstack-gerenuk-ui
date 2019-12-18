@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 26 Nov 15:43:03 CET 2019
+# Wed 18 Dec 14:01:17 CET 2019
 
 import gerenuk
 import collections
@@ -37,7 +37,8 @@ from gerenuk_dashboard.content.monitoring import tables
 from gerenuk_dashboard.content.exceptions import PermissionsError
 from gerenuk_dashboard.content import helpers
 
-# Charts definition
+
+# Constants
 ChartDefHour = collections.namedtuple(
     "ChartDefHour",
     ("quota_key", "label", "used_phrase", "filters")
@@ -87,7 +88,7 @@ CHART_DEFS_DAY = [
 ]
 
 
-
+# Classes
 class IndexView(DataTableView):
     """
     The instances view  
@@ -106,16 +107,49 @@ class IndexView(DataTableView):
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
-    
+
+    def get_statistics(self, instance_id, **kwargs):
+        """
+        Returns statistics from Gerenuk
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
+
+        uuid = list()
+        uuid.append(str(instance_id))
+        results = gerenuk_api.get_instances_monitoring(uuid)
+
+        return results
+
+
     def get_data(self):
         """
         Getter used by the InstancesTable model
         """
         my_instances = []
         instances, self._more = api.nova.server_list(self.request)
-        
+        users_cache = dict()
+ 
         for instance in instances:
             if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                user_id = instance.user_id
+                if not user_id in users_cache:
+                    user = api.keystone.user_get(self.request, user_id, admin=False)
+                    users_cache[user_id] = user.name
+                    if hasattr(user, 'description'):
+                       users_cache[user_id] += " (" + user.description + ")"
+
+                info = self.get_statistics(instance.id)
+
+                instance.user = users_cache[user_id]
+                instance.memory = "N/A"
+                instance.vcpu = "N/A"
+                
+                if instance.status == "ACTIVE" :
+                   instance.memory = str(float(info[instance.id]["mem"]["daily"])) + "%"
+                   instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "%"
+
                 my_instances.append(instance)
 
             elif hasattr(instance, "user_id"):

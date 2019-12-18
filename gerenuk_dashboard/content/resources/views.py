@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 17 Dec 16:12:06 CET 2019
+# Wed 18 Dec 14:11:43 CET 2019
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -90,12 +90,11 @@ class IndexView(MultiTableView):
         unfiltred_volumes = cinder.volumes.list()
         volumes_list = list()
 
-        for v in unfiltred_volumes:
-            if all(getattr(v, attr) == value for (attr, value) in filters.items()):
-                volumes_list.append(v)
+        for volume in unfiltred_volumes:
+            if all(getattr(volume, attr) == value for (attr, value) in filters.items()):
+                volumes_list.append(volume)
 
         return volumes_list
-
 
     def get_snapshots_data(self):
         """
@@ -105,15 +104,24 @@ class IndexView(MultiTableView):
         owner = os_auth.get_user(self.request).project_id
         filters = {"owner" : owner}
         snapshots_list = list()
+        users_cache = dict()
 
         try:
             snapshots = api.glance.image_list_detailed(self.request)
-            for s in snapshots[0]:
-                if s.properties.get("image_type") == "snapshot":
-                    if (s.properties.get("user_id") == userid) or all(
-                            getattr(s, attr) == value for (attr, value) in filters.items()
+            for snapshot in snapshots[0]:
+                if snapshot.properties.get("image_type") == "snapshot":
+                    if (snapshot.properties.get("user_id") == userid) or all(
+                            getattr(snapshot, attr) == value for (attr, value) in filters.items()
                     ) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
-                        snapshots_list.append(s)
+                        user_id = snapshot.properties.get("user_id")
+                        if not user_id in users_cache:
+                           user = api.keystone.user_get(self.request, user_id, admin=False)
+                           users_cache[user_id] = user.name
+                           if hasattr(user, 'description'):
+                              users_cache[user_id] += " (" + user.description + ")"
+
+                        snapshot.user = users_cache[user_id]
+                        snapshots_list.append(snapshot)
 
             return snapshots_list
 
