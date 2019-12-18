@@ -45,7 +45,7 @@ PROJECT_MANAGER_ROLE = "project_manager"
 
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-pip install gerenuk_dashboard-0.6.tar.gz
+pip install gerenuk_dashboard-0.7.tar.gz
 cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 

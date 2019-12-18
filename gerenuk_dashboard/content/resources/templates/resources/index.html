@@ -8,15 +8,17 @@
 
 {% block main %}
   {% if is_project_manager %}
-    <p>{% trans "You're known as project manager."%}</p>
+    <p>{% trans "You're known as project manager." %}</p>
   {% endif %}
 
   <div>
     <h2> {% trans "Instances" %}</h2>
+    <p>{% trans "The following table contains only your own instances" %} (<a href="{{ instances_url }}">{% trans "see all instances of the project" %}</a>).</p>
     {{ instances_table.render }}
   </div>
 
   <div>
+    <p>{% trans "The following table contains only your own volumes" %} (<a href="{{ volumes_url }}">{% trans "see all volumes of the project" %}</a>).</p>
     <h2>{% trans "Volumes" %}</h2>
     {{ volumes_table.render }}
   </div>
