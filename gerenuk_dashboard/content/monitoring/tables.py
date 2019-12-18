@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Thu  7 Nov 16:44:09 CET 2019
+# Wed 18 Dec 14:03:21 CET 2019
 
 from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -28,6 +28,7 @@ from openstack_dashboard import api
 from openstack_dashboard.views import get_url_with_pagination
 
 
+# Functions
 def get_monitoring_detail_link(obj, request):
     """
     Redirects to monitoring details
@@ -53,15 +54,17 @@ def get_instance_detail_link(obj, request):
     )
 
 
-
+# Classes
 class InstancesTable(tables.DataTable):
     """
     The horizon table used to display instance.
     """
-    user = tables.Column("user", verbose_name=_("Username"))
+    user = tables.Column("user", verbose_name=_("User"))
     name = tables.Column("name", verbose_name=_("Name"), link=get_instance_detail_link)
     image_name = tables.Column("image_name", verbose_name=_("Image"))
     status = tables.Column("status", verbose_name=_("Status"))
+    memory = tables.Column("memory", verbose_name=_("Memory"))
+    vcpu = tables.Column("vcpu", verbose_name=_("vCPU")) 
 
 
     def get_instid(instance):
@@ -73,8 +76,6 @@ class InstancesTable(tables.DataTable):
         return instid
 
 
-    memory = tables.Column("memory", verbose_name=_("Memory"))
-    vcpu = tables.Column("vcpu", verbose_name=_("vCPU")) 
     instance_id = tables.Column(get_instid, verbose_name=_("Statistics"), link=get_monitoring_detail_link)
 
     
