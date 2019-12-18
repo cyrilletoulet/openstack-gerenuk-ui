@@ -94,7 +94,6 @@ class IndexView(MultiTableView):
 
         return volumes_list
 
-
     def get_snapshots_data(self):
         """
         Getter used by SnapshotsTable model.
@@ -103,6 +102,7 @@ class IndexView(MultiTableView):
         owner = os_auth.get_user(self.request).project_id
         filters = {"owner" : owner}
         snapshots_list = list()
+        users_cache = dict()
 
         try:
             snapshots = api.glance.image_list_detailed(self.request)
@@ -111,6 +111,14 @@ class IndexView(MultiTableView):
                     if (s.properties.get("user_id") == userid) or all(
                             getattr(s, attr) == value for (attr, value) in filters.items()
                     ) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                        user_id = s.properties.get("user_id")
+                        if not user_id in users_cache:
+                           user = api.keystone.user_get(self.request, user_id, admin=False)
+                           users_cache[user_id] = user.name
+                           if hasattr(user, 'description'):
+                              users_cache[user_id] += " (" + user.description + ")"
+
+                        s.user = users_cache[user_id]
                         snapshots_list.append(s)
 
             return snapshots_list
