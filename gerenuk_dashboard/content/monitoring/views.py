@@ -127,37 +127,42 @@ class IndexView(DataTableView):
         """
         Getter used by the InstancesTable model
         """
-        my_instances = []
+        instances_list = []
         instances, self._more = api.nova.server_list(self.request)
         users_cache = dict()
- 
+
+        # Get current user information
+        current_user_id = os_auth.get_user(self.request).id
+        user = api.keystone.user_get(self.request, current_user_id, admin=False)
+        users_cache[current_user_id] = user.name
+        if hasattr(user, 'description'):
+            users_cache[current_user_id] += " (" + user.description + ")"
+
+        # Add allowed instances to result list
         for instance in instances:
-            if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+            if (hasattr(instance, "user_id") and instance.user_id == current_user_id) or helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                # Look for unkonw user
                 user_id = instance.user_id
-                if not user_id in users_cache:
-                    user = api.keystone.user_get(self.request, user_id, admin=False)
-                    users_cache[user_id] = user.name
-                    if hasattr(user, 'description'):
-                       users_cache[user_id] += " (" + user.description + ")"
+                if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                    if not user_id in users_cache:
+                        user = api.keystone.user_get(self.request, user_id, admin=False)
+                        users_cache[user_id] = user.name
+                        if hasattr(user, 'description'):
+                            users_cache[user_id] += " (" + user.description + ")"
 
+                # Get info
                 info = self.get_statistics(instance.id)
-
                 instance.user = users_cache[user_id]
-                instance.memory = "N/A"
-                instance.vcpu = "N/A"
-                
-                if instance.status == "ACTIVE" :
-                   instance.memory = str(float(info[instance.id]["mem"]["daily"])) + "%"
-                   instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "%"
+                try:
+                    instance.memory = str(float(info[instance.id]["mem"]["daily"])) + "%"
+                    instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "%"
+                except KeyError:
+                    instance.memory = "N/A"
+                    instance.vcpu = "N/A"
 
-                my_instances.append(instance)
+                instances_list.append(instance)
 
-            elif hasattr(instance, "user_id"):
-                 userid = instance.user_id
-                 if (userid == os_auth.get_user(self.request).id):
-                    my_instances.append(instance)
-
-        return my_instances
+        return instances_list
 
 
 
