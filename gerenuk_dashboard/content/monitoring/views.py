@@ -143,8 +143,9 @@ class IndexView(DataTableView):
 
                 info = self.get_statistics(instance.id)
                 if instance.status == status :
-                   mem =float(info[instance.id]["mem"]["daily"])
-                   vcpu = float(info[instance.id]["vcpu"]["daily"])
+                   mem = str(float(info[instance.id]["mem"]["daily"])) + "%"
+                   vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "%"
+
                 else :
                    mem = "NA"
                    vcpu = "NA"
