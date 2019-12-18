@@ -129,7 +129,8 @@ class IndexView(DataTableView):
         my_instances = []
         instances, self._more = api.nova.server_list(self.request)
         users_cache = dict()
-        
+        status = "ACTIVE"
+ 
         for instance in instances:
             if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                 user_id = instance.user_id
@@ -141,9 +142,13 @@ class IndexView(DataTableView):
 
 
                 info = self.get_statistics(instance.id)
-                mem =float(info[instance.id]["mem"]["daily"])
-                vcpu = float(info[instance.id]["vcpu"]["daily"])
-
+                if instance.status == status :
+                   mem =float(info[instance.id]["mem"]["daily"])
+                   vcpu = float(info[instance.id]["vcpu"]["daily"])
+                else :
+                   mem = "NA"
+                   vcpu = "NA"
+               
                 instance.user = users_cache[user_id]
                 instance.memory = mem
                 instance.vcpu = vcpu
