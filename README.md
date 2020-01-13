@@ -25,9 +25,9 @@ yum -y install python-pip mysql-connector-python
 yum-config-manager --disable epel
 pip install gerenuk-1.3.0.tar.gz
 mkdir /etc/gerenuk
-chmod 711 /etc/gerenuk
+chmod -R 711 /etc/gerenuk
 touch /etc/gerenuk/gerenuk.conf
-chmod -R 644 /etc/gerenuk/gerenuk.conf
+chmod 644 /etc/gerenuk/gerenuk.conf
 ```
 
 Next, configure gerenuk in **/etc/gerenuk/gerenuk.conf**:
