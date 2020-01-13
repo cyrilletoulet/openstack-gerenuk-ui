@@ -13,8 +13,12 @@ The distribution will be located in **dist/** directory.
 
 
 ## Installation
+### Prerequisites
 
-First of all, you need to install [gerenuk](https://github.com/cyrilletoulet/gerenuk) API:
+First of all, you need to install [gerenuk](https://github.com/cyrilletoulet/gerenuk) API. 
+Please refer to the Gerenuk documentation for details.
+
+First, install gerenuk package:
 ```bash
 yum-config-manager --enable epel
 yum -y install python-pip mysql-connector-python
@@ -43,9 +47,29 @@ GERENUK_CONF = "/etc/gerenuk/gerenuk.conf"
 PROJECT_MANAGER_ROLE = "project_manager"
 ```
 
+Finally, configure the OpenStack API policies to add the project manager role:
+```
+# In /etc/keystone/policy.json
+    "project_manager": "role:project_manager",
+    "identity:get_user": "rule:admin_or_owner or rule:project_manager",
+
+# In /etc/nova/policy.json
+    "project_manager": "role:project_manager and project_id:%(project_id)s",
+    "default": "rule:admin_or_user or rule:project_manager",
+    "os_compute_api:os-hypervisors": "rule:default",
+```
+
+And restart the concerned APIs:
+```bash
+systemctl restart openstack-nova-api.service httpd.service
+```
+
+
+### Dashboard extension
+
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-pip install gerenuk_dashboard-0.7.tar.gz
+pip install gerenuk_dashboard-1.0.tar.gz
 cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 
