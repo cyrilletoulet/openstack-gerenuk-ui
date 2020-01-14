@@ -114,7 +114,7 @@ class UserAlertsTable(tables.DataTable):
     The horizon table used to display user alerts.
     """
     name = tables.Column("user", verbose_name=_("User"))
-    message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
@@ -214,7 +214,7 @@ class ProjectAlertsTable(tables.DataTable):
     The horizon table used to display project alerts.
     """
     project = tables.Column("project", verbose_name=_("Project"))
-    message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
@@ -244,7 +244,7 @@ class ReadAlertsTable(tables.DataTable):
     The horizon table used to display read alerts.
     """
     project = tables.Column("project", verbose_name=_("Project"))
-    message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id"))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
