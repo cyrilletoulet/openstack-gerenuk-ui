@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Mon 25 Nov 09:22:28 CET 2019
+# Tue 14 Jan 11:12:17 CET 2020
 
 import gerenuk
 import gerenuk.api
@@ -25,7 +25,6 @@ import gerenuk.api
 from openstack_auth import utils as os_auth
 
 from django.conf import settings
-from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ungettext_lazy
 
@@ -115,11 +114,7 @@ class UserAlertsTable(tables.DataTable):
     The horizon table used to display user alerts.
     """
     name = tables.Column("user", verbose_name=_("User"))
-
-    if get_language() == "fr":
-        message = tables.Column("message_fr", verbose_name=_("Message"))
-    else:
-        message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
@@ -219,10 +214,7 @@ class ProjectAlertsTable(tables.DataTable):
     The horizon table used to display project alerts.
     """
     project = tables.Column("project", verbose_name=_("Project"))
-    if get_language() == "fr":
-        message = tables.Column("message_fr", verbose_name=_("Message"))
-    else:
-        message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id "))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
@@ -252,10 +244,7 @@ class ReadAlertsTable(tables.DataTable):
     The horizon table used to display read alerts.
     """
     project = tables.Column("project", verbose_name=_("Project"))
-    if get_language() == "fr":
-        message = tables.Column("message_fr", verbose_name=_("Message"))
-    else:
-        message = tables.Column("message_en", verbose_name=_("Message"))
+    message = tables.Column("message", verbose_name=_("Message"))
     id = tables.Column("id", verbose_name=_("Id"))
     severity = tables.Column(get_severity, verbose_name=_("Severity"), sortable= True, display_choices=SEVERITY_CHOICES)
     created = tables.Column("timestamp" , verbose_name=_("Updated"))
