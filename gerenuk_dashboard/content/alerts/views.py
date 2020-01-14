@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 10 Dec 15:04:51 CET 2019
+# Tue 14 Jan 15:07:43 CET 2020
 
 import gerenuk
 import gerenuk.api
@@ -174,7 +174,7 @@ class ReadAlerts(DataTableView):
         tagged_alerts = []
 
         for l in range(0, len(read_alerts)):
-            if (read_alerts[l]["uuid"]) and (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)):
+            if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                 re_alerts = []
                 re_alerts.append(read_alerts[l])
 
