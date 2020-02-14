@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 14 Jan 15:07:43 CET 2020
+# Fri 14 Feb 13:51:52 CET 2020
 
 import gerenuk
 import gerenuk.api
@@ -101,17 +101,19 @@ class AlertsTables(MultiTableView):
         user_alerts = []
         users_cache = dict()
 
-
         for l in range(0, len(unread_alerts)):
               if (helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE)) and (unread_alerts[l]["uuid"]) :
 
                 un_alerts = []
                 user_id = str(unread_alerts[l]["uuid"])
                 if not user_id in users_cache:
-                    user = api.keystone.user_get(self.request, user_id, admin=False)
-                    users_cache[user_id] = user.name
-                    if hasattr(user, 'description'):
-                       users_cache[user_id] += " (" + user.description + ")"
+                    try:
+                        user = api.keystone.user_get(self.request, user_id, admin=False)
+                        users_cache[user_id] = user.name
+                        if hasattr(user, 'description'):
+                            users_cache[user_id] += " (" + user.description + ")"
+                    except:
+                        users_cache[user_id] = "Deleted (%s)" % (user_id,)
 
                 unread_alerts[l].update({'user': users_cache[user_id]})
                 un_alerts.append(unread_alerts[l])
