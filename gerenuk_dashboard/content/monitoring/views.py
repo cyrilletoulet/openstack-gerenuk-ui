@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed 18 Dec 14:01:17 CET 2019
+# Fri 14 Feb 13:59:49 CET 2020
 
 import gerenuk
 import collections
@@ -145,10 +145,13 @@ class IndexView(DataTableView):
                 user_id = instance.user_id
                 if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                     if not user_id in users_cache:
-                        user = api.keystone.user_get(self.request, user_id, admin=False)
-                        users_cache[user_id] = user.name
-                        if hasattr(user, 'description'):
-                            users_cache[user_id] += " (" + user.description + ")"
+                        try:
+                            user = api.keystone.user_get(self.request, user_id, admin=False)
+                            users_cache[user_id] = user.name
+                            if hasattr(user, 'description'):
+                                users_cache[user_id] += " (" + user.description + ")"
+                        except:
+                            users_cache[user_id] = "Deleted (%s)" % (user_id,)
 
                 # Get info
                 info = self.get_statistics(instance.id)

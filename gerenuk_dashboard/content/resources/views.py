@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed 18 Dec 14:11:43 CET 2019
+# Fri 14 Feb 13:30:55 CET 2020
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -115,10 +115,13 @@ class IndexView(MultiTableView):
                     ) and helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
                         user_id = snapshot.properties.get("user_id")
                         if not user_id in users_cache:
-                           user = api.keystone.user_get(self.request, user_id, admin=False)
-                           users_cache[user_id] = user.name
-                           if hasattr(user, 'description'):
-                              users_cache[user_id] += " (" + user.description + ")"
+                            try:
+                                user = api.keystone.user_get(self.request, user_id, admin=False)
+                                users_cache[user_id] = user.name
+                                if hasattr(user, 'description'):
+                                    users_cache[user_id] += " (" + user.description + ")"
+                            except:
+                                users_cache[user_id] = "Deleted (%s)" % (user_id,)
 
                         snapshot.user = users_cache[user_id]
                         snapshots_list.append(snapshot)
