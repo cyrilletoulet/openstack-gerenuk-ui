@@ -81,6 +81,11 @@ systemctl restart httpd
 You should now find the new dashboard in **Project** / **Information** panel.
 
 
+## Configuration
+
+To use the "Available resources" panel, the nova "Host Aggregate" name has to be present in corresponding flavor metadatas.
+
+
 ## Development
 ### Translation
 
