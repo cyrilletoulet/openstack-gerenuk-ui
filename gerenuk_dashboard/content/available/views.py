@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 26 Nov 14:44:29 CET 2019
+# Thu 23 Jul 15:21:04 CEST 2020
 
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -56,15 +56,35 @@ class AvailableResourcesView(TemplateView):
         """
         Return the available flavors
         """
-        nova_client = nova.novaclient(self.request)
+        try:
+            # Until Stein release
+            nova_client = nova.novaclient(self.request)
+        except:
+            # From Stein release
+            nova_client = nova
+        
         hypervisors_list = dict()
         flavors_availability = dict()
 
-        for hypervisor in nova_client.hypervisors.list(): 
-            hypervisors_list[hypervisor.service["host"]] = hypervisor
-        aggregates = nova_client.aggregates.list()
+        try:
+            # Until Stein release
+            for hypervisor in nova_client.hypervisors.list(): 
+                hypervisors_list[hypervisor.service["host"]] = hypervisor
+            aggregates = nova_client.aggregates.list()
+        except:
+            # From Stein release
+            for hypervisor in nova_client.hypervisor_list(self.request):
+                hypervisors_list[hypervisor.service["host"]] = hypervisor
+            aggregates = nova_client.aggregate_details_list(self.request)
 
-        for flavor in nova_client.flavors.list():
+        try:
+            # Until Stein release
+            flavor_list = nova_client.flavors.list()
+        except:
+            # From Stein release
+            flavor_list = nova_client.flavor_list(self.request)
+            
+        for flavor in flavor_list:
                 flavor_meta = flavor.get_keys()
                 
                 if len(flavor_meta.keys()) >= 1:

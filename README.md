@@ -23,7 +23,7 @@ First, install gerenuk package:
 yum-config-manager --enable epel
 yum -y install python-pip mysql-connector-python
 yum-config-manager --disable epel
-pip install gerenuk-1.3.0.tar.gz
+pip install gerenuk-1.4.0.tar.gz
 mkdir /etc/gerenuk
 chmod -R 711 /etc/gerenuk
 touch /etc/gerenuk/gerenuk.conf
@@ -69,7 +69,7 @@ systemctl restart openstack-nova-api.service httpd.service
 
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-pip install gerenuk_dashboard-1.0.tar.gz
+pip install gerenuk_dashboard-2.0.tar.gz
 cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 
@@ -79,6 +79,11 @@ systemctl restart httpd
 ```
 
 You should now find the new dashboard in **Project** / **Information** panel.
+
+
+## Configuration
+
+To use the "Available resources" panel, the nova "Host Aggregate" name has to be present in corresponding flavor metadatas.
 
 
 ## Development
