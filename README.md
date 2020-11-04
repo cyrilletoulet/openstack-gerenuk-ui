@@ -57,6 +57,7 @@ Finally, configure the OpenStack API policies to add the project manager role:
     "project_manager": "role:project_manager and project_id:%(project_id)s",
     "default": "rule:admin_or_user or rule:project_manager",
     "os_compute_api:os-hypervisors": "rule:default",
+    "os_compute_api:os-aggregates:show": "rule:default",
 ```
 
 And restart the concerned APIs:
