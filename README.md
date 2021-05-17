@@ -70,8 +70,8 @@ systemctl restart openstack-nova-api.service httpd.service
 
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-pip install gerenuk_dashboard-2.0.tar.gz
-cp /usr/lib/python2.7/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
+pip3 install gerenuk_dashboard-2.1.tar.gz
+cp /usr/local/lib/python3.6/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 
 And finally restart the HTTP server:
@@ -94,7 +94,7 @@ To update the translation files, you need to deploy your code on a development s
 
 First, you can generate the language file:
 ```bash
-cd /usr/lib/python2.7/site-packages/gerenuk_dashboard/
+cd /usr/local/lib/python3.6/site-packages/gerenuk_dashboard/
 django-admin makemessages -l fr 
 ```
 
