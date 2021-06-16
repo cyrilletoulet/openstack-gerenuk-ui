@@ -129,6 +129,7 @@ class InstancesTable(tables.DataTable):
     """
     The horizon table used to display user instances.
     """
+    owner = tables.Column("user", verbose_name=_("User"))
     name = tables.Column("name", verbose_name=_("Name"), link=get_server_detail_link)
     status = tables.Column("status", verbose_name=_("Status"))
     image_name = tables.Column("image_name", verbose_name=_("Image name"))
@@ -149,6 +150,7 @@ class VolumesTable(tables.DataTable):
     """
     The horizon table used to display user volumes.
     """
+    owner = tables.Column("user", verbose_name=_("User"))
     name = tables.Column("name", verbose_name=_("Name"),link="horizon:project:volumes:detail")
     description = tables.Column("description", verbose_name=_("Description"))
     size = tables.Column(get_volume_size, verbose_name=_("Size"), attrs={"data-type": "size"})
