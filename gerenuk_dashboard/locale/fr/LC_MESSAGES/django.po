@@ -21,85 +21,87 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-18 12:56+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-06-16 13:53+0000\n"
 "PO-Revision-Date: 2019-11-19 15:51+0000\n"
 "Last-Translator: iheb eladib <cyrille.toulet@univ-lille.fr>\n"
 "Language-Team: French\n"
 "Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: content/alerts/panel.py:29 content/alerts/views.py:46
+#: content/alerts/panel.py:29 content/alerts/views.py:48
 msgid "Alerts"
 msgstr "Alertes"
 
-#: content/alerts/tables.py:67 content/alerts/tables.py:157
+#: content/alerts/tables.py:66 content/alerts/tables.py:153
 msgid "Don't forget to solve the problem before marking an alert as read."
 msgstr "N'oubliez pas de résoudre le problème avant de marquer une alerte comme lue."
 
-#: content/alerts/tables.py:76 content/alerts/tables.py:166
+#: content/alerts/tables.py:75 content/alerts/tables.py:162
 msgid "Mark alert as read"
 msgid_plural "Mark them as read"
 msgstr[0] "Marquer comme lu"
 msgstr[1] "Marquer comme lu"
 
-#: content/alerts/tables.py:84 content/alerts/tables.py:174
+#: content/alerts/tables.py:83 content/alerts/tables.py:170
 msgid "Scheduled deletion of alert"
 msgid_plural "Scheduled deletion of alerts"
 msgstr[0] "Suppression de l'alerte planifiée"
 msgstr[1] "Suppression des alertes planifiée"
 
-#: content/alerts/tables.py:117
+#: content/alerts/tables.py:116 content/monitoring/tables.py:62
+#: content/resources/tables.py:132 content/resources/tables.py:153
+#: content/resources/tables.py:179
 msgid "User"
 msgstr "Utilisateur"
 
-#: content/alerts/tables.py:119 content/alerts/tables.py:121
-#: content/alerts/tables.py:222 content/alerts/tables.py:224
-#: content/alerts/tables.py:255 content/alerts/tables.py:257
+#: content/alerts/tables.py:117 content/alerts/tables.py:217
+#: content/alerts/tables.py:247
 msgid "Message"
 msgstr "Message"
 
-#: content/alerts/tables.py:122 content/alerts/tables.py:225
+#: content/alerts/tables.py:118 content/alerts/tables.py:218
 msgid "Id "
 msgstr "ID"
 
-#: content/alerts/tables.py:123 content/alerts/tables.py:226
-#: content/alerts/tables.py:259
+#: content/alerts/tables.py:119 content/alerts/tables.py:219
+#: content/alerts/tables.py:249
 msgid "Severity"
 msgstr "Sévérité"
 
-#: content/alerts/tables.py:124 content/alerts/tables.py:227
-#: content/alerts/tables.py:260
+#: content/alerts/tables.py:120 content/alerts/tables.py:220
+#: content/alerts/tables.py:250
 msgid "Updated"
 msgstr "Dernière modification"
 
-#: content/alerts/tables.py:145
+#: content/alerts/tables.py:141 content/alerts/templates/alerts/index.html:15
 msgid "User alerts"
 msgstr "Alertes utilisateurs"
 
-#: content/alerts/tables.py:220 content/alerts/tables.py:253
+#: content/alerts/tables.py:216 content/alerts/tables.py:246
 msgid "Project"
 msgstr "Projet"
 
-#: content/alerts/tables.py:242
+#: content/alerts/tables.py:235 content/alerts/templates/alerts/index.html:22
 msgid "Project alerts"
 msgstr "Alertes du projet"
 
-#: content/alerts/tables.py:258
+#: content/alerts/tables.py:248
 msgid "Id"
 msgstr "ID"
 
-#: content/alerts/tables.py:282
+#: content/alerts/tables.py:272 content/alerts/templates/alerts/read.html:15
 msgid "Read alerts"
 msgstr "Alertes lues"
 
 #: content/alerts/templates/alerts/index.html:11
 #: content/alerts/templates/alerts/read.html:11
-#: content/available/templates/available/index.html:11
+#: content/monitoring/templates/monitoring/all.html:8
 #: content/monitoring/templates/monitoring/detail.html:11
 #: content/monitoring/templates/monitoring/index.html:8
+#: content/resources/templates/resources/all.html:11
 #: content/resources/templates/resources/index.html:11
 msgid "You're known as project manager."
 msgstr "Vous êtes connu en tant que chef de projet."
@@ -112,68 +114,61 @@ msgstr "Aller aux archives"
 msgid "Back to alerts"
 msgstr "Revenir aux alertes"
 
-#: content/alerts/views.py:131
+#: content/alerts/views.py:150
 msgid "Archives"
 msgstr "Archives"
 
-#: content/available/panel.py:29 content/available/views.py:41
-msgid "Available resources"
-msgstr "Ressources disponibles"
-
-#: content/available/tables.py:30
-msgid "Flavor id"
-msgstr "ID du gabarit"
-
-#: content/available/tables.py:31
-#: content/available/templates/available/index.html:23
-msgid "Flavor name"
-msgstr "Nom du gabarit"
-
-#: content/available/tables.py:32
-msgid "Available instances"
-msgstr "Instances disponibles"
-
-#: content/available/tables.py:40
-msgid "Flavors"
-msgstr "Gabarits"
-
-#: content/available/templates/available/index.html:19
-msgid "Available"
-msgstr "Disponible"
-
-#: content/monitoring/panel.py:29 content/monitoring/views.py:97
-#: content/monitoring/views.py:136
+#: content/monitoring/panel.py:29 content/monitoring/views.py:274
 msgid "Monitoring"
 msgstr "Supervision"
 
-#: content/monitoring/tables.py:61 content/resources/tables.py:132
-#: content/resources/tables.py:152
+#: content/monitoring/tables.py:63 content/resources/tables.py:133
+#: content/resources/tables.py:154
 msgid "Name"
 msgstr "Nom"
 
-#: content/monitoring/tables.py:62
+#: content/monitoring/tables.py:64
 msgid "Image"
 msgstr "Image"
 
-#: content/monitoring/tables.py:63 content/resources/tables.py:133
-#: content/resources/tables.py:155
+#: content/monitoring/tables.py:65 content/resources/tables.py:134
+#: content/resources/tables.py:157
 msgid "Status"
 msgstr "Statut"
 
-#: content/monitoring/tables.py:75
+#: content/monitoring/tables.py:66
+msgid "vCPU usage"
+msgstr "Utilisation vCPU"
+
+#: content/monitoring/tables.py:78
 msgid "Statistics"
 msgstr "Statistiques d'utilisation"
 
-#: content/monitoring/tables.py:83
-#: content/monitoring/templates/monitoring/index.html:11
-#: content/resources/tables.py:143
-#: content/resources/templates/resources/index.html:15
+#: content/monitoring/tables.py:86 content/resources/tables.py:144
 msgid "Instances"
 msgstr "Instances"
 
-#: content/monitoring/templates/monitoring/detail.html
+#: content/monitoring/templates/monitoring/all.html:9
+msgid "Back to your own monitoring"
+msgstr "Revenir à votre propre monitoring"
+
+#: content/monitoring/templates/monitoring/all.html:12
+#: content/resources/templates/resources/all.html:16
+msgid "All instances"
+msgstr "Toutes les instances"
+
+#: content/monitoring/templates/monitoring/detail.html:13
 msgid "Back to monitoring"
 msgstr "Revenir au monitoring"
+
+#: content/monitoring/templates/monitoring/index.html:9
+msgid "Go to project monitoring"
+msgstr "Aller au monitoring du projet"
+
+#: content/monitoring/templates/monitoring/index.html:12
+#: content/resources/templates/resources/index.html:16
+msgid "My instances"
+msgstr "Mes instances"
 
 #: content/monitoring/templates/monitoring/piechartday.html:12
 msgid "Daily"
@@ -193,50 +188,58 @@ msgstr "Dernière heure"
 msgid "Weekly"
 msgstr "Dernière semaine"
 
-#: content/monitoring/views.py:48
+#: content/monitoring/views.py:49
 msgid "Monitoring Hourly"
 msgstr "Supérvision horaire"
 
-#: content/monitoring/views.py:50 content/monitoring/views.py:66
-#: content/monitoring/views.py:82
+#: content/monitoring/views.py:51 content/monitoring/views.py:67
+#: content/monitoring/views.py:83
 msgid "Memory"
 msgstr "Mémoire"
 
-#: content/monitoring/views.py:51 content/monitoring/views.py:67
-#: content/monitoring/views.py:83
+#: content/monitoring/views.py:52 content/monitoring/views.py:68
+#: content/monitoring/views.py:84
 msgid "vCPU"
 msgstr "vCPU"
 
-#: content/monitoring/views.py:52 content/monitoring/views.py:68
-#: content/monitoring/views.py:84
+#: content/monitoring/views.py:53 content/monitoring/views.py:69
+#: content/monitoring/views.py:85
 msgid "CPU"
 msgstr "CPU"
 
-#: content/monitoring/views.py:64
+#: content/monitoring/views.py:65
 msgid "Monitoring Weekly"
 msgstr "Supervision hebdomadaire"
 
-#: content/monitoring/views.py:80
+#: content/monitoring/views.py:81
 msgid "Monitoring Daily"
 msgstr "Supervision quotidienne"
 
-#: content/monitoring/views.py:180
+#: content/monitoring/views.py:98
+msgid "My monitoring"
+msgstr "Ma supervision"
+
+#: content/monitoring/views.py:188
+msgid "All users monitoring"
+msgstr "Supervision de tous les utilisateurs"
+
+#: content/monitoring/views.py:318
 msgid "Insufficient permissions."
 msgstr "Permissions insuffisantes"
 
-#: content/monitoring/views.py:185
+#: content/monitoring/views.py:323
 msgid "Unable to retrieve instance monitoring."
 msgstr "Impossible de récupérer la supervision de l'instance"
 
-#: content/monitoring/views.py:250 content/monitoring/views.py:327
-#: content/monitoring/views.py:405
+#: content/monitoring/views.py:388 content/monitoring/views.py:465
+#: content/monitoring/views.py:543
 msgctxt "Label in the limit summary"
 msgid "Used"
 msgstr "Utilisé"
 
 #: content/resources/panel.py:29 content/resources/views.py:51
-msgid "Resources"
-msgstr "Ressources"
+msgid "My resources"
+msgstr "Mes ressources"
 
 #: content/resources/tables.py:43
 msgctxt "Type of an image"
@@ -258,67 +261,77 @@ msgstr "Non disponible"
 msgid "%sGB"
 msgstr "%s Go"
 
-#: content/resources/tables.py:134
+#: content/resources/tables.py:135
 msgid "Image name"
 msgstr "Nom de l'image"
 
-#: content/resources/tables.py:135
+#: content/resources/tables.py:136
 msgid "Instance monitoring"
 msgstr "Supervision de l'instance"
 
-#: content/resources/tables.py:153 content/resources/tables.py:178
+#: content/resources/tables.py:155 content/resources/tables.py:181
 msgid "Description"
 msgstr "Description"
 
-#: content/resources/tables.py:154
+#: content/resources/tables.py:156
 msgid "Size"
 msgstr "Taille"
 
-#: content/resources/tables.py:156
+#: content/resources/tables.py:158
 msgid "ID"
 msgstr "ID"
 
-#: content/resources/tables.py:168
-#: content/resources/templates/resources/index.html:20
+#: content/resources/tables.py:170
 msgid "Volumes"
 msgstr "Volumes"
 
-#: content/resources/tables.py:177
+#: content/resources/tables.py:180
 msgid "Snapshot Name"
 msgstr "Nom de l'instantané"
 
-#: content/resources/tables.py:179
+#: content/resources/tables.py:182
 msgid "Type"
 msgstr "Type"
 
-#: content/resources/tables.py:180
+#: content/resources/tables.py:183
 msgid "Snapshot ID"
 msgstr "ID de l'instantané"
 
-#: content/resources/tables.py:188
-#: content/resources/templates/resources/index.html:25
+#: content/resources/tables.py:191
 msgid "Snapshots"
 msgstr "Instantanés"
 
-#: content/resources/views.py:118
+#: content/resources/templates/resources/all.html:12
+msgid "Back to your own resources"
+msgstr "Revenir à vos propres ressources"
+
+#: content/resources/templates/resources/all.html:21
+msgid "All volumes"
+msgstr "Tous les volumes"
+
+#: content/resources/templates/resources/all.html:26
+msgid "All snapshots"
+msgstr "Tous les instantanés"
+
+#: content/resources/templates/resources/index.html:12
+msgid "Go to project resources"
+msgstr "Aller aux ressources du projet"
+
+#: content/resources/templates/resources/index.html:21
+msgid "My volumes"
+msgstr "Mes volumes"
+
+#: content/resources/templates/resources/index.html:26
+msgid "My snapshots"
+msgstr "Mes instantanés"
+
+#: content/resources/views.py:146 content/resources/views.py:253
 msgid "Unable to retrieve snapshots"
 msgstr "Impossible de récupérer les instantanés"
 
-#: content/resources/templates/resources/index.html:16
-msgid "The following table contains only your own instances"
-msgstr "Le tableau suivant contient uniquement vos propres instances"
-
-#: content/resources/templates/resources/index.html:16
-msgid "see all instances of the project"
-msgstr "voir toutes les instances du projet"
-
-#: content/resources/templates/resources/index.html:21
-msgid "The following table contains only your own volumes"
-msgstr "Le tableau suivant contient uniquement vos propres volumes"
-
-#: content/resources/templates/resources/index.html:21
-msgid "see all volumes of the project"
-msgstr "voir touts les volumes du projet"
+#: content/resources/views.py:162
+msgid "All users resources"
+msgstr "Toutes les ressources"
 
 #: enabled/_1810_project_informations_panel.py:31
 msgid "Information"
