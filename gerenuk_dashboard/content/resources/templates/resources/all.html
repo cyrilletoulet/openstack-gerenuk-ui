@@ -9,21 +9,21 @@
 {% block main %}
   {% if is_project_manager %}
     <p>{% trans "You're known as project manager." %}</p>
-    <p><a href="{{ all_resources_url }}">{% trans "Go to project resources" %}</a></p>
+    <p><a href="{{ back_to_resources_url }}">{% trans "Back to your own resources"%}</a></p>
   {% endif %}
 
   <div>
-    <h2> {% trans "My instances" %}</h2>
+    <h2> {% trans "All instances" %}</h2>
     {{ instances_table.render }}
   </div>
 
   <div>
-    <h2>{% trans "My volumes" %}</h2>
+    <h2>{% trans "All volumes" %}</h2>
     {{ volumes_table.render }}
   </div>
 
   <div>
-    <h2>{% trans "My snapshots" %}</h2>
+    <h2>{% trans "All snapshots" %}</h2>
     {{ snapshots_table.render }}
   </div>
 

@@ -16,7 +16,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Tue 29 Oct 09:51:24 CET 2019
+# Wed Jun 16 10:19:55 AM CEST 2021
 
 from django.conf.urls import url
 from gerenuk_dashboard.content.resources import views
@@ -25,4 +25,5 @@ from gerenuk_dashboard.content.resources import views
 # Define URL patterns
 urlpatterns = [
     url(r"^$", views.IndexView.as_view(), name="index"),
+    url(r"^all/$", views.AllResourcesView.as_view(), name="all"),
 ]
