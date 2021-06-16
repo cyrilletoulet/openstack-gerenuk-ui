@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Fri 14 Feb 13:59:49 CET 2020
+# Wed Jun 16 12:27:49 PM CEST 2021
 
 import gerenuk
 import collections
@@ -95,7 +95,23 @@ class IndexView(DataTableView):
     """
     table_class = tables.InstancesTable
     template_name = "project/monitoring/index.html"
-    page_title = _("Monitoring")
+    page_title = _("My monitoring")
+    users_cache = dict()
+
+    
+    def cache_user(self, user_id):
+        """
+        Add an user to the users cache if not exists
+        :param user_id: (str) The user id to cache
+        """
+        if not user_id in self.users_cache:
+            try:
+                user = api.keystone.user_get(self.request, user_id, admin=False)
+                self.users_cache[user_id] = user.name
+                if hasattr(user, 'description'):
+                    self.users_cache[user_id] += " (" + user.description + ")"
+            except:
+                self.users_cache[user_id] = "Deleted (%s)" % (user_id,)
 
 
     def get_context_data(self, **kwargs):
@@ -104,6 +120,7 @@ class IndexView(DataTableView):
         """
         context = super(IndexView, self).get_context_data(**kwargs)
         context["page_title"] = self.page_title
+        context["all_monitoring_url"] = reverse("horizon:project:monitoring:all")
         context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
         return context
 
@@ -133,35 +150,114 @@ class IndexView(DataTableView):
 
         # Get current user information
         current_user_id = os_auth.get_user(self.request).id
-        user = api.keystone.user_get(self.request, current_user_id, admin=False)
-        users_cache[current_user_id] = user.name
-        if hasattr(user, 'description'):
-            users_cache[current_user_id] += " (" + user.description + ")"
 
         # Add allowed instances to result list
         for instance in instances:
-            if (hasattr(instance, "user_id") and instance.user_id == current_user_id) or helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+            if (hasattr(instance, "user_id") and instance.user_id == current_user_id):
                 # Look for unkonw user
                 user_id = instance.user_id
-                if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
-                    if not user_id in users_cache:
-                        try:
-                            user = api.keystone.user_get(self.request, user_id, admin=False)
-                            users_cache[user_id] = user.name
-                            if hasattr(user, 'description'):
-                                users_cache[user_id] += " (" + user.description + ")"
-                        except:
-                            users_cache[user_id] = "Deleted (%s)" % (user_id,)
+                self.cache_user(user_id)
 
                 # Get info
                 info = self.get_statistics(instance.id)
-                instance.user = users_cache[user_id]
+                instance.user = self.users_cache[user_id]
+                    
                 try:
-                    instance.memory = str(float(info[instance.id]["mem"]["daily"])) + "%"
-                    instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "%"
+                    instance.vcpu = str(float(info[instance.id]["vcpu"]["weekly"])) + "% (last week)"
                 except KeyError:
-                    instance.memory = "N/A"
-                    instance.vcpu = "N/A"
+                    try:
+                        instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "% (last day)"
+                    except KeyError:
+                        try:
+                            instance.vcpu = str(float(info[instance.id]["vcpu"]["hourly"])) + "% (last hour)"
+                        except KeyError:
+                            instance.vcpu = "N/A"
+
+                instances_list.append(instance)
+
+        return instances_list
+
+
+
+class AllResourcesView(DataTableView):
+    """
+    The instances view  
+    """
+    table_class = tables.InstancesTable
+    template_name = "project/monitoring/all.html"
+    page_title = _("All users monitoring")
+    users_cache = dict()
+
+    
+    def cache_user(self, user_id):
+        """
+        Add an user to the users cache if not exists
+        :param user_id: (str) The user id to cache
+        """
+        if not user_id in self.users_cache:
+            try:
+                user = api.keystone.user_get(self.request, user_id, admin=False)
+                self.users_cache[user_id] = user.name
+                if hasattr(user, 'description'):
+                    self.users_cache[user_id] += " (" + user.description + ")"
+            except:
+                self.users_cache[user_id] = "Deleted (%s)" % (user_id,)
+
+
+    def get_context_data(self, **kwargs):
+        """
+        Define the view context
+        """
+        context = super(AllResourcesView, self).get_context_data(**kwargs)
+        context["page_title"] = self.page_title
+        context["back_to_monitoring_url"] = reverse("horizon:project:monitoring:index")
+        context["is_project_manager"] = helpers.has_role(self.request ,settings.PROJECT_MANAGER_ROLE)
+        return context
+
+
+    def get_statistics(self, instance_id, **kwargs):
+        """
+        Returns statistics from Gerenuk
+        """
+        gerenuk_config = gerenuk.Config()
+        gerenuk_config.load(settings.GERENUK_CONF)
+        gerenuk_api = gerenuk.api.InstancesMonitorAPI(gerenuk_config)
+
+        uuid = list()
+        uuid.append(str(instance_id))
+        results = gerenuk_api.get_instances_monitoring(uuid)
+
+        return results
+
+
+    def get_data(self):
+        """
+        Getter used by the InstancesTable model
+        """
+        instances_list = []
+        instances, self._more = api.nova.server_list(self.request)
+
+        # Add allowed instances to result list
+        for instance in instances:
+            if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
+                # Look for unkonw user
+                user_id = instance.user_id
+                self.cache_user(user_id)
+
+                # Get info
+                info = self.get_statistics(instance.id)
+                instance.user = self.users_cache[user_id]
+                    
+                try:
+                    instance.vcpu = str(float(info[instance.id]["vcpu"]["weekly"])) + "% (last week)"
+                except KeyError:
+                    try:
+                        instance.vcpu = str(float(info[instance.id]["vcpu"]["daily"])) + "% (last day)"
+                    except KeyError:
+                        try:
+                            instance.vcpu = str(float(info[instance.id]["vcpu"]["hourly"])) + "% (last hour)"
+                        except KeyError:
+                            instance.vcpu = "N/A"
 
                 instances_list.append(instance)
 
