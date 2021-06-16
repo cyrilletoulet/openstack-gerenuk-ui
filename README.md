@@ -4,7 +4,6 @@ This Gerenuk UI is a dashboard extension for OpenStack Horizon project.
 ## Features
 
  * Alerts view
- * Available resources view
  * Monitoring view
  * Resources view
 

@@ -15,6 +15,12 @@
 First of all, you need to install [gerenuk](https://github.com/cyrilletoulet/gerenuk) API. 
 Please refer to the Gerenuk documentation for details.
 
+After installation, you should modify permissions of gerenuk config file to allow HTTPd server to read it:
+```bash
+chown apache:root /etc/gerenuk/gerenuk.conf
+chmod 470 /etc/gerenuk/gerenuk.conf
+```
+
 ### 2.2. Database configuration
 Next, configure database in **/etc/gerenuk/gerenuk.conf** (see gerenuk config reference for details):
 ```
@@ -39,20 +45,14 @@ PROJECT_MANAGER_ROLE = "project_manager"
 
 Next, configure the OpenStack API policies to add the project manager role:
 ```
-# In /etc/keystone/policy.json
-    "project_manager": "role:project_manager",
-    "identity:get_user": "rule:admin_or_owner or rule:project_manager",
-
-# In /etc/nova/policy.json
-    "project_manager": "role:project_manager and project_id:%(project_id)s",
-    "default": "rule:admin_or_user or rule:project_manager",
-    "os_compute_api:os-hypervisors": "rule:default",
-    "os_compute_api:os-aggregates:show": "rule:default",
+# In /etc/keystone/policy.yaml
+"project_manager": "role:project_manager"
+"identity:get_user": "(rule:project_manager) or (role:reader and system_scope:all) or (role:reader and token.domain.id:%(target.user.domain_id)s) or user_id:%(target.user.id)s"
 ```
 
 Finally, restart the concerned APIs:
 ```bash
-systemctl restart openstack-nova-api.service httpd.service
+systemctl restart httpd.service
 ```
 
 
