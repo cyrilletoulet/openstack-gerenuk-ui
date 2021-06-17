@@ -17,6 +17,7 @@ Please refer to the Gerenuk documentation for details.
 
 After installation, you should modify permissions of gerenuk config file to allow HTTPd server to read it:
 ```bash
+chmod a+x /etc/gerenuk/
 chown apache:root /etc/gerenuk/gerenuk.conf
 chmod 470 /etc/gerenuk/gerenuk.conf
 ```
