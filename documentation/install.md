@@ -4,7 +4,7 @@
 
 | OpenStack release | OpenStack Gerenuk UI release | Gerenuk release |
 | --- | --- | --- |
-| Ussuri | 2.1 | 2.0.x |
+| Ussuri | 2.2 | 2.0.x |
 | Train | 2.0 | 1.4.x |
 | Stein | 2.0 | 1.4.x |
 
@@ -60,7 +60,7 @@ systemctl restart httpd.service
 ### 3.1. Gerenuk OpenStack UI
 Install the openstack-gerenuk-ui by copying python package:
 ```bash
-pip3 install gerenuk_dashboard-2.1.tar.gz
+pip3 install gerenuk_dashboard-2.2.tar.gz
 cp /usr/local/lib/python3.6/site-packages/gerenuk_dashboard/enabled/* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled/
 ```
 

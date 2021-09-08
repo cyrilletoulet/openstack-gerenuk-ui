@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name = "gerenuk_dashboard",
-    version = "2.1",
+    version = "2.2",
     description = "The Gerenuk dashboard for OpenStack",
     url = "https://github.com/cyrilletoulet/openstack-gerenuk-ui",
 

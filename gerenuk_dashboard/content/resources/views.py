@@ -17,7 +17,7 @@
 # Cyrille TOULET <cyrille.toulet@univ-lille.fr>
 # Iheb ELADIB <iheb.eladib@univ-lille.fr>
 #
-# Wed Jun 16 10:03:52 AM CEST 2021
+# Wed Sep  8 03:16:03 PM CEST 2021
 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse
@@ -216,7 +216,7 @@ class AllResourcesView(MultiTableView):
 
         for volume in unfiltred_volumes:
             if helpers.has_role(self.request, settings.PROJECT_MANAGER_ROLE):
-                user_id = volume.properties.get("user_id")
+                user_id = volume.user_id
                 self.cache_user(user_id)
                 volume.user = self.users_cache[user_id]
                 volumes_list.append(volume)
